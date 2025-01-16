@@ -11,7 +11,7 @@ import AthleteCard from "./components/AthleteCard.vue";
 
 // setTimeout(() => {
 //   socket.close();
-// }, 3000);
+// }, 10000);
 
 // onUnmounted(() => socket.close());
 
