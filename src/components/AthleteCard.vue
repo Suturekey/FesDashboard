@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted, watch, ref, type PropType } from "vue";
+import { watch, ref } from "vue";
 
 interface AthleteData {
   athleteId: string;
@@ -11,9 +11,9 @@ interface AthleteData {
   };
 }
 
-const props = defineProps({
-  athlete: Object as PropType<AthleteData>,
-});
+const props = defineProps<{
+  athlete: AthleteData;
+}>();
 
 const fake = {
   stepGoal: 10000,
@@ -24,7 +24,9 @@ const fake = {
 const minHeartRate = ref(props.athlete?.metrics.heartRate);
 const maxHeartRate = ref(props.athlete?.metrics.heartRate);
 const avgHeartRate = ref(props.athlete?.metrics.heartRate);
-let numMeasurements = 0;
+const maxSpeed = ref(props.athlete?.metrics.speed);
+const avgSpeed = ref(props.athlete?.metrics.speed);
+let numMeasurements = 1;
 
 watch(
   () => props.athlete,
@@ -35,6 +37,7 @@ watch(
 
     numMeasurements++;
     const newHeartRate = newAthleteData.metrics.heartRate;
+    const newSpeed = newAthleteData.metrics.speed;
 
     if (!minHeartRate.value || newHeartRate < minHeartRate.value) {
       minHeartRate.value = newHeartRate;
@@ -42,9 +45,24 @@ watch(
       maxHeartRate.value = newHeartRate;
     }
 
-    avgHeartRate.value =
-      ((avgHeartRate.value || 0) * numMeasurements + newHeartRate) /
-      (numMeasurements + 1);
+    if (!maxSpeed.value || newSpeed > maxSpeed.value) {
+      maxSpeed.value = newSpeed;
+    }
+
+    function getRoundedAverage(
+      oldAverage: number,
+      newValue: number,
+      decimalPlaces: number
+    ) {
+      const ROUNDING_CONST = Math.pow(10, decimalPlaces);
+      const newAverage =
+        ((oldAverage ?? 0) * (numMeasurements - 1) + newValue) /
+        numMeasurements;
+      return Math.round(newAverage * ROUNDING_CONST) / ROUNDING_CONST;
+    }
+
+    avgHeartRate.value = getRoundedAverage(avgHeartRate.value, newHeartRate, 0);
+    avgSpeed.value = getRoundedAverage(avgSpeed.value, newSpeed, 2);
   }
 );
 </script>
@@ -103,9 +121,9 @@ watch(
         </div>
         <div class="stats">
           <span>Avg</span>
-          <span class="fwt-bold">{{ avgHeartRate }}</span>
+          <span class="fwt-bold">{{ avgSpeed }}</span>
           <span>Max</span>
-          <span class="fwt-bold">{{ maxHeartRate }}</span>
+          <span class="fwt-bold">{{ maxSpeed }}</span>
         </div>
       </div>
     </div>
@@ -191,7 +209,7 @@ watch(
 
     &::-webkit-progress-value {
       border-radius: var(--border-radius);
-      background-color: #5d71b0;
+      background-color: #18abd3;
     }
   }
 
@@ -199,7 +217,7 @@ watch(
     display: flex;
 
     span:first-of-type {
-      font-size: 1.2rem;
+      font-size: 0.8rem;
     }
 
     .currentSteps {

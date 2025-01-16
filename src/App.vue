@@ -2,18 +2,18 @@
 import { onUnmounted, ref } from "vue";
 import AthleteCard from "./components/AthleteCard.vue";
 
-// const athleteList = ref([]);
-// const socket = new WebSocket("ws://ubuntu01.fes-sport.de:10001");
+const athleteList = ref([]);
+const socket = new WebSocket("ws://ubuntu01.fes-sport.de:10001");
 
-// socket.addEventListener("message", (messageEvent) => {
-//   athleteList.value = JSON.parse(messageEvent.data);
-// });
+socket.addEventListener("message", (messageEvent) => {
+  athleteList.value = JSON.parse(messageEvent.data);
+});
 
-// setTimeout(() => {
-//   socket.close();
-// }, 10000);
+setTimeout(() => {
+  socket.close();
+}, 10000);
 
-// onUnmounted(() => socket.close());
+onUnmounted(() => socket.close());
 
 const fakeAthletes = [
   {
@@ -113,7 +113,7 @@ const fakeAthletes = [
   <div>
     <div class="athleteList">
       <AthleteCard
-        v-for="athlete in fakeAthletes"
+        v-for="athlete in athleteList"
         :athlete="athlete"
       ></AthleteCard>
     </div>
