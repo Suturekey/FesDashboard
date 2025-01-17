@@ -105,8 +105,8 @@ onMounted(() => {
   --border-radius: 8px;
   position: relative;
   padding: var(--padding);
-  background-color: #262626;
-  color: #e5e5e5;
+  background-color: var(--c-card-bg-dark);
+  color: var(--c-text-light);
   border-radius: var(--border-radius);
   display: flex;
   flex-direction: column;
@@ -121,7 +121,7 @@ onMounted(() => {
     width: 100%;
     top: 0;
     left: 0;
-    background-color: #5d71b0;
+    background-color: var(--c-accent);
     border-top-left-radius: var(--border-radius);
     border-top-right-radius: var(--border-radius);
   }
@@ -144,7 +144,7 @@ onMounted(() => {
 
   & > p {
     line-height: 1;
-    color: black;
+    color: var(--c-text-dark);
   }
 
   .names--small {
@@ -171,11 +171,11 @@ onMounted(() => {
 
     &::-webkit-progress-value {
       border-radius: var(--border-radius);
-      background-color: #18abd3;
+      background-color: var(--c-accent-bright);
     }
 
     &::-moz-progress-bar {
-      background-color: #18abd3;
+      background-color: var(--c-accent-bright);
     }
   }
 
@@ -202,19 +202,12 @@ onMounted(() => {
 
 .bottom {
   height: 120px;
-  background-color: #3c3c3c;
+  background-color: var(--c-bg-dark-gray);
   border-radius: 9px;
   display: flex;
 
   & > div {
     flex: 1;
-  }
-
-  .iconPlaceholder {
-    --icon-dim: 2rem;
-    width: var(--icon-dim);
-    height: var(--icon-dim);
-    background-color: rgb(238, 238, 238);
   }
 
   .statDisplay {
@@ -257,7 +250,7 @@ onMounted(() => {
 
   .badge {
     position: absolute;
-    background-color: #262626c6;
+    background-color: rgb(from var(--c-card-bg-dark) r g b / 0.75);
     padding: 0.3rem;
     border-radius: 4px;
     top: 1.2rem;

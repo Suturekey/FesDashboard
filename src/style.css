@@ -2,6 +2,20 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Colour scheme */
+:root {
+  --c-card-bg-dark: #262626;
+  --c-card-bg-light: #ececec;
+  --c-bg-dark: #1b1b1b;
+  --c-bg-light: #e5e5e5;
+  --c-bg-dark-gray: #3c3c3c;
+  --c-text-light: #e5e5e5;
+  --c-text-dark: #000000;
+  --c-text-gray: #414141;
+  --c-accent: #5d71b0;
+  --c-accent-bright: #18abd3;
+}
+
 html,
 body,
 #app {

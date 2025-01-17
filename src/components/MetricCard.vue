@@ -59,6 +59,7 @@ const props = defineProps<{
   display: flex;
   flex-direction: column;
   border-radius: 9px;
+  background-color: var(--c-card-bg-light);
 
   .title {
     display: flex;
@@ -83,11 +84,11 @@ const props = defineProps<{
 
       &::-webkit-progress-value {
         border-radius: var(--border-radius);
-        background-color: #18abd3;
+        background-color: var(--c-accent-bright);
       }
 
       &::-moz-progress-bar {
-        background-color: #18abd3;
+        background-color: var(--c-accent-bright);
       }
     }
   }
@@ -121,7 +122,7 @@ const props = defineProps<{
     .substat__description {
       font-size: 0.7rem;
       text-transform: uppercase;
-      color: #414141;
+      color: var(--c-text-gray);
 
       span:nth-child(2) {
         margin-left: 0.25rem;
@@ -132,6 +133,10 @@ const props = defineProps<{
       font-size: 0.8rem;
       font-weight: 600;
       justify-self: end;
+
+      span:nth-child(2) {
+        margin-left: 0.25rem;
+      }
     }
   }
 }

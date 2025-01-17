@@ -49,4 +49,4 @@ Object.values(athletes).forEach((athlete) => {
   athlete.speedRecord = 20 + Math.floor(Math.random() * 10);
 });
 
-export default athletes;
+export default athletes as Record<string, I_FakeAthleteData>;
