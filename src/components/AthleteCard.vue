@@ -1,26 +1,20 @@
 <script setup lang="ts">
-import { watch, ref } from "vue";
 import Icon from "./Icon.vue";
-
-interface AthleteData {
-  athleteId: string;
-  timestamp: string;
-  metrics: {
-    heartRate: number;
-    steps: number;
-    speed: number;
-  };
-}
+import type { I_AthleteData } from "../../types";
+import { fakeData } from "../data/fakeAthleteData.ts";
+import { watch, ref, onMounted, computed } from "vue";
 
 const props = defineProps<{
-  athlete: AthleteData;
+  athlete: I_AthleteData;
 }>();
 
-const fake = {
-  stepGoal: 10000,
-  firstName: "Chun Li",
-  surname: "Zhang",
-};
+const fakeAthleteData = ref();
+
+const imageUrl = computed(
+  () =>
+    new URL(`/src/data/images/${props.athlete?.athleteId}.jpg`, import.meta.url)
+      .href
+);
 
 const minHeartRate = ref(props.athlete?.metrics.heartRate);
 const maxHeartRate = ref(props.athlete?.metrics.heartRate);
@@ -28,6 +22,19 @@ const avgHeartRate = ref(props.athlete?.metrics.heartRate);
 const maxSpeed = ref(props.athlete?.metrics.speed);
 const avgSpeed = ref(props.athlete?.metrics.speed);
 let numMeasurements = 1;
+
+onMounted(() => {
+  fakeAthleteData.value = (
+    fakeData as Record<
+      string,
+      {
+        firstName: string;
+        lastName: string;
+        stepGoal: number;
+      }
+    >
+  )[props.athlete.athleteId];
+});
 
 watch(
   () => props.athlete,
@@ -70,22 +77,24 @@ watch(
 
 <template>
   <div class="card">
-    <!-- <img src="" alt=""/> -->
-    <div class="imagePlaceholder"></div>
+    <img
+      :src="imageUrl"
+      :alt="`Portrait of ${fakeAthleteData?.firstName} ${fakeAthleteData?.lastName}`"
+    />
     <div class="names">
-      <p class="names--small">{{ fake.firstName }}</p>
-      <p class="names--big">{{ fake.surname }}</p>
+      <p class="names--small">{{ fakeAthleteData?.firstName }}</p>
+      <p class="names--big">{{ fakeAthleteData?.lastName }}</p>
     </div>
     <div class="steps">
       <progress
         class="steps_progress"
         :value="athlete?.metrics.steps"
-        :max="fake.stepGoal"
+        :max="fakeAthleteData?.stepGoal"
       ></progress>
       <div class="steps_explicit">
         <span>Schritte</span>
         <span class="currentSteps">{{ athlete?.metrics.steps }}</span>
-        <span> / {{ fake.stepGoal }} </span>
+        <span> / {{ fakeAthleteData?.stepGoal }} </span>
       </div>
     </div>
     <div class="bottom">
@@ -167,13 +176,13 @@ watch(
   & > div {
     z-index: 1;
   }
-}
-.imagePlaceholder {
-  position: absolute;
-  width: var(--image-dim);
-  aspect-ratio: 1;
-  border-radius: 50%;
-  background-color: rgb(238, 238, 238);
+
+  img {
+    position: absolute;
+    width: var(--image-dim);
+    aspect-ratio: 1;
+    border-radius: 50%;
+  }
 }
 
 .names {

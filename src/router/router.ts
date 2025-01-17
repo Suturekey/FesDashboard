@@ -5,7 +5,7 @@ import AthleteView from "../views/AthleteView.vue";
 
 const routes = [
   { path: "/", component: DashboardView },
-  { path: "/athlete/:id", component: AthleteView },
+  { path: "/athlete/:id", component: AthleteView, props: true },
 ];
 
 const router = createRouter({

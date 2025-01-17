@@ -41,4 +41,7 @@ defineProps<{
 .icon--speed {
   mask-image: url("@/assets/icons/iconmonstr-dashboard-7.svg");
 }
+.icon--walk {
+  mask-image: url("@/assets/icons/shoe-print.svg");
+}
 </style>
