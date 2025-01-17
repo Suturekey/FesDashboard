@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { watch, ref } from "vue";
+import Icon from "./Icon.vue";
 
 interface AthleteData {
   athleteId: string;
@@ -69,7 +70,7 @@ watch(
 
 <template>
   <div class="card">
-    <!-- <img src="" alt="" /> -->
+    <!-- <img src="" alt=""/> -->
     <div class="imagePlaceholder"></div>
     <div class="names">
       <p class="names--small">{{ fake.firstName }}</p>
@@ -94,7 +95,7 @@ watch(
           Erhöht
         </div>
         <div class="measurement">
-          <div class="iconPlaceholder"></div>
+          <Icon icon="heartRate" size="xl" colour="#e5e5e5"></Icon>
           <span class="measurement_value">{{
             athlete?.metrics.heartRate
           }}</span>
@@ -115,7 +116,7 @@ watch(
       <div class="statDisplay speed">
         <span class="title">Geschwindigkeit</span>
         <div class="measurement">
-          <div class="iconPlaceholder"></div>
+          <Icon icon="speed" size="xl" colour="#e5e5e5"></Icon>
           <span class="measurement_value">{{ athlete?.metrics.speed }}</span>
           <span class="measurement_unit">MPH</span>
         </div>
@@ -193,7 +194,6 @@ watch(
     font-size: 1.8rem;
   }
 }
-
 .steps {
   margin-left: calc(var(--image-dim) + var(--image-margin));
   margin-bottom: 1.5rem;
@@ -209,6 +209,10 @@ watch(
 
     &::-webkit-progress-value {
       border-radius: var(--border-radius);
+      background-color: #18abd3;
+    }
+
+    &::-moz-progress-bar {
       background-color: #18abd3;
     }
   }
@@ -256,10 +260,10 @@ watch(
     flex-direction: column;
     align-items: center;
     justify-content: space-between;
+    padding-block: 0.5rem;
 
     .title {
       font-size: 0.8rem;
-      margin-top: 0.2rem;
     }
 
     .measurement {
@@ -269,7 +273,7 @@ watch(
       .measurement_value {
         font-size: 2.5rem;
         margin-right: 0.1rem;
-        margin-left: 0.3rem;
+        margin-left: 0.2rem;
       }
       .measurement_unit {
         align-self: start;
@@ -278,7 +282,6 @@ watch(
     }
 
     .stats {
-      margin-bottom: 0.2rem;
       display: flex;
       gap: 0.4rem;
 
