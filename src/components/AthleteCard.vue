@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import Icon from "./Icon.vue";
-import type { I_AthleteData } from "../../types";
-import { fakeData } from "../data/fakeAthleteData.ts";
+import type { I_AthleteData, I_FakeAthleteData } from "../../types";
+import fakeData from "../data/fakeAthleteData";
 import { watch, ref, onMounted, computed } from "vue";
 
 const props = defineProps<{
@@ -24,16 +24,9 @@ const avgSpeed = ref(props.athlete?.metrics.speed);
 let numMeasurements = 1;
 
 onMounted(() => {
-  fakeAthleteData.value = (
-    fakeData as Record<
-      string,
-      {
-        firstName: string;
-        lastName: string;
-        stepGoal: number;
-      }
-    >
-  )[props.athlete.athleteId];
+  fakeAthleteData.value = (fakeData as Record<string, I_FakeAthleteData>)[
+    props.athlete.athleteId
+  ];
 });
 
 watch(

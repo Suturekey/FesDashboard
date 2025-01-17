@@ -41,7 +41,22 @@ defineProps<{
 .icon--speed {
   mask-image: url("@/assets/icons/iconmonstr-dashboard-7.svg");
 }
-.icon--walk {
+.icon--steps {
   mask-image: url("@/assets/icons/shoe-print.svg");
+}
+.icon--crown {
+  mask-image: url("@/assets/icons/crown.svg");
+}
+.icon--distance {
+  mask-image: url("@/assets/icons/map-marker-distance.svg");
+}
+.icon--elevation {
+  mask-image: url("@/assets/icons/elevation-rise.svg");
+}
+.icon--metronome {
+  mask-image: url("@/assets/icons/metronome.svg");
+}
+.icon--heart {
+  mask-image: ("@/assets/icons/heart.svg");
 }
 </style>

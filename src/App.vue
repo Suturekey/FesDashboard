@@ -9,7 +9,6 @@ const socket = new WebSocket("ws://ubuntu01.fes-sport.de:10001");
 
 socket.addEventListener("message", (messageEvent) => {
   const athleteList: I_AthleteData[] = JSON.parse(messageEvent.data);
-
   athleteStore.replaceList(athleteList);
 });
 

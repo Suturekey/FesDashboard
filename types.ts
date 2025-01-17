@@ -7,3 +7,11 @@ export interface I_AthleteData {
     speed: number;
   };
 }
+
+export interface I_FakeAthleteData {
+  firstName: string;
+  lastName: string;
+  stepGoal: number;
+  stepRecord: number;
+  speedRecord: number;
+}

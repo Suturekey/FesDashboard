@@ -1,7 +1,7 @@
 import { createRouter, createWebHistory } from "vue-router";
 
 import DashboardView from "../views/DashboardView.vue";
-import AthleteView from "../views/AthleteView.vue";
+import AthleteView from "../views/AthleteDetailView.vue";
 
 const routes = [
   { path: "/", component: DashboardView },
