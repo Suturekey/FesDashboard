@@ -12,6 +12,7 @@ const athleteStore = useAthleteStore();
       <AthleteCard
         v-for="athlete in athleteStore.athleteList"
         :athlete="athlete"
+        :stats="athleteStore.athleteMap.get(athlete.athleteId)"
         @click="$router.push(`/athlete/${athlete.athleteId}`)"
       ></AthleteCard>
     </div>

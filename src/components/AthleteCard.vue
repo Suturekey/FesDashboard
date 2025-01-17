@@ -1,11 +1,16 @@
 <script setup lang="ts">
 import Icon from "./Icon.vue";
-import type { I_AthleteData, I_FakeAthleteData } from "../../types";
+import type {
+  I_AthleteData,
+  I_AthleteStats,
+  I_FakeAthleteData,
+} from "../../types";
 import fakeData from "../data/fakeAthleteData";
 import { watch, ref, onMounted, computed } from "vue";
 
 const props = defineProps<{
   athlete: I_AthleteData;
+  stats?: I_AthleteStats;
 }>();
 
 const fakeAthleteData = ref();
@@ -16,56 +21,11 @@ const imageUrl = computed(
       .href
 );
 
-const minHeartRate = ref(props.athlete?.metrics.heartRate);
-const maxHeartRate = ref(props.athlete?.metrics.heartRate);
-const avgHeartRate = ref(props.athlete?.metrics.heartRate);
-const maxSpeed = ref(props.athlete?.metrics.speed);
-const avgSpeed = ref(props.athlete?.metrics.speed);
-let numMeasurements = 1;
-
 onMounted(() => {
   fakeAthleteData.value = (fakeData as Record<string, I_FakeAthleteData>)[
     props.athlete.athleteId
   ];
 });
-
-watch(
-  () => props.athlete,
-  (newAthleteData) => {
-    if (!newAthleteData) {
-      return;
-    }
-
-    numMeasurements++;
-    const newHeartRate = newAthleteData.metrics.heartRate;
-    const newSpeed = newAthleteData.metrics.speed;
-
-    if (!minHeartRate.value || newHeartRate < minHeartRate.value) {
-      minHeartRate.value = newHeartRate;
-    } else if (!maxHeartRate.value || newHeartRate > maxHeartRate.value) {
-      maxHeartRate.value = newHeartRate;
-    }
-
-    if (!maxSpeed.value || newSpeed > maxSpeed.value) {
-      maxSpeed.value = newSpeed;
-    }
-
-    function getRoundedAverage(
-      oldAverage: number,
-      newValue: number,
-      decimalPlaces: number
-    ) {
-      const ROUNDING_CONST = Math.pow(10, decimalPlaces);
-      const newAverage =
-        ((oldAverage ?? 0) * (numMeasurements - 1) + newValue) /
-        numMeasurements;
-      return Math.round(newAverage * ROUNDING_CONST) / ROUNDING_CONST;
-    }
-
-    avgHeartRate.value = getRoundedAverage(avgHeartRate.value, newHeartRate, 0);
-    avgSpeed.value = getRoundedAverage(avgSpeed.value, newSpeed, 2);
-  }
-);
 </script>
 
 <template>
@@ -105,13 +65,13 @@ watch(
         </div>
         <div class="stats">
           <span
-            >Min <span class="fwt-bold">{{ minHeartRate }}</span></span
+            >Min <span class="fwt-bold">{{ stats?.heartRate.min }}</span></span
           >
           <span
-            >Avg <span class="fwt-bold">{{ avgHeartRate }}</span></span
+            >Avg <span class="fwt-bold">{{ stats?.heartRate.avg }}</span></span
           >
           <span
-            >Max <span class="fwt-bold">{{ maxHeartRate }}</span></span
+            >Max <span class="fwt-bold">{{ stats?.heartRate.max }}</span></span
           >
         </div>
       </div>
@@ -124,9 +84,9 @@ watch(
         </div>
         <div class="stats">
           <span>Avg</span>
-          <span class="fwt-bold">{{ avgSpeed }}</span>
+          <span class="fwt-bold">{{ stats?.speed.avg }}</span>
           <span>Max</span>
-          <span class="fwt-bold">{{ maxSpeed }}</span>
+          <span class="fwt-bold">{{ stats?.speed.max }}</span>
         </div>
       </div>
     </div>

@@ -15,3 +15,16 @@ export interface I_FakeAthleteData {
   stepRecord: number;
   speedRecord: number;
 }
+
+export interface I_AthleteStats {
+  numMeasurements: number;
+  heartRate: {
+    min: number;
+    avg: number;
+    max: number;
+  };
+  speed: {
+    avg: number;
+    max: number;
+  };
+}
