@@ -3,6 +3,7 @@ import Icon from "../components/Icon.vue";
 import MetricCard from "../components/MetricCard.vue";
 import type { I_FakeAthleteData } from "../../types";
 import { useAthleteStore } from "../stores/athleteStore";
+import { round } from "../utils";
 import fakeData from "../data/fakeAthleteData";
 import { ref, computed, type Ref } from "vue";
 
@@ -23,8 +24,18 @@ const athlete = computed(
       ?.metrics
 );
 
+const stats = computed(() => athleteStore.athleteMap.get(props.id));
+
 const imageUrl = computed(
   () => new URL(`/src/data/images/${props.id}.jpg`, import.meta.url).href
+);
+
+const distance = computed(
+  () => `${round((athlete.value?.steps ?? 0) * 0.0003, 2)} km`
+);
+
+const elevation = computed(
+  () => `${round((athlete.value?.steps ?? 0) * 0.002, 0)} m`
 );
 
 function inRange(
@@ -35,84 +46,6 @@ function inRange(
   if (!value) value = 0;
   return value >= rangeStart && value <= rangeEnd;
 }
-
-const cardDisplayData = {
-  steps: {
-    header: "Schritte",
-    icon: "steps",
-    unit: "Schritte",
-    progressMax: fakeAthleteData.value.stepGoal,
-    subStats: [
-      {
-        icon: "crown",
-        title: "Rekord",
-        value: fakeAthleteData.value.stepRecord,
-      },
-      {
-        icon: "distance",
-        title: "Distanz",
-        value: "6.03 km",
-      },
-      {
-        icon: "elevation",
-        title: "Höhe",
-        value: "150 m",
-      },
-      {
-        icon: "crown",
-        title: "Frequenz",
-        value: "1.3 Hz",
-      },
-    ],
-  },
-  heartRate: {
-    header: "Schritte",
-    icon: "steps",
-    unit: "bpm",
-    progressMax: fakeAthleteData.value.stepGoal,
-    subStats: [
-      {
-        title: "Minimum",
-        value: 20,
-        withUnit: true,
-      },
-      {
-        title: "Durchschnitt",
-        value: 89,
-        withUnit: true,
-      },
-      {
-        title: "Maximum",
-        value: 150,
-        withUnit: true,
-      },
-    ],
-  },
-  speed: {
-    header: "Geschwindigkeit",
-    icon: "steps",
-    unit: "mph",
-    progressMax: fakeAthleteData.value.stepGoal,
-    subStats: [
-      {
-        icon: "crown",
-        title: "Rekord",
-        value: 25,
-        withUnit: true,
-      },
-      {
-        title: "Durchschnitt",
-        value: 21,
-        withUnit: true,
-      },
-      {
-        title: "Maximum",
-        value: 23,
-        withUnit: true,
-      },
-    ],
-  },
-};
 </script>
 
 <template>
@@ -127,24 +60,65 @@ const cardDisplayData = {
       <span class="smallName">{{ fakeAthleteData.firstName }}</span>
     </div>
     <MetricCard
+      class="card"
       header="Scritte"
       icon="steps"
       unit="Schritte"
       :liveMetric="athlete?.steps ?? 0"
       :progressMax="fakeAthleteData.stepGoal"
+      :substats="[
+        {
+          icon: 'crown',
+          description: 'Rekord',
+          value: fakeAthleteData.stepRecord,
+        },
+        {
+          icon: 'distance',
+          description: 'Distanz',
+          value: distance,
+        },
+        {
+          icon: 'elevation',
+          description: 'Höhe',
+          value: elevation,
+        },
+        {
+          icon: 'metronome',
+          description: 'Frequenz',
+          value: '1.3 Hz',
+        },
+      ]"
     >
       <template v-slot:metricExtra>
-        <span>
+        <span class="stepsInfo">
           {{ fakeAthleteData.stepGoal - (athlete?.steps ?? 0) }} übrig
         </span>
       </template>
     </MetricCard>
     <MetricCard
+      class="card"
       header="Herzfrequenz"
       icon="heartRate"
-      unit="BPM"
+      unit="bpm"
       :liveMetric="athlete?.heartRate ?? 0"
-      :progressMax="fakeAthleteData.stepGoal"
+      :progressMax="250"
+      :substats="[
+        {
+          description: 'Minimum',
+          value: stats?.heartRate.min ?? 0,
+          withUnit: true,
+        },
+        {
+          description: 'Durchschnitt',
+          value: stats?.heartRate.avg ?? 0,
+          withUnit: true,
+        },
+        {
+          description: 'Maximum',
+          value: stats?.heartRate.max ?? 0,
+          withUnit: true,
+        },
+      ]"
     >
       <template v-slot:metricExtra>
         <div>
@@ -157,11 +131,30 @@ const cardDisplayData = {
       </template>
     </MetricCard>
     <MetricCard
+      class="card"
       header="Geschwindigkeit"
       icon="speed"
       unit="MPH"
       :liveMetric="athlete?.speed ?? 0"
-      :progressMax="fakeAthleteData.stepGoal"
+      :progressMax="30"
+      :substats="[
+        {
+          icon: 'crown',
+          description: 'Rekord',
+          withUnit: true,
+          value: fakeAthleteData.speedRecord,
+        },
+        {
+          description: 'Durchschnitt',
+          value: stats?.heartRate.avg ?? 0,
+          withUnit: true,
+        },
+        {
+          description: 'Maximum',
+          value: stats?.heartRate.max ?? 0,
+          withUnit: true,
+        },
+      ]"
     ></MetricCard>
   </div>
 </template>
@@ -192,5 +185,15 @@ const cardDisplayData = {
   .smallName {
     font-size: 1.2rem;
   }
+}
+
+.card:not(:last-of-type) {
+  margin-bottom: 1.5rem;
+}
+
+.stepsInfo {
+  color: #002fca;
+  font-size: 0.9rem;
+  font-weight: 600;
 }
 </style>

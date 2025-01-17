@@ -10,6 +10,12 @@ const props = defineProps<{
   unit: string;
   hasGraph?: boolean;
   progressMax?: number;
+  substats?: {
+    icon?: string;
+    description: string;
+    value: number | string;
+    withUnit?: boolean;
+  }[];
 }>();
 </script>
 
@@ -25,13 +31,22 @@ const props = defineProps<{
     </div>
     <div class="stats">
       <div class="mainStat">
-        <div class="metric">
-          <span>{{ liveMetric }}</span>
-          <span>{{ unit }}</span>
-        </div>
+        <span class="value">{{ liveMetric }}</span>
+        <span class="unit">{{ unit }}</span>
         <slot name="metricExtra"></slot>
       </div>
-      <div class="subStats"></div>
+      <div class="subStats">
+        <template v-for="substat in substats">
+          <span class="substat__description">
+            <Icon v-if="substat.icon" :icon="substat.icon"></Icon>
+            <span>{{ substat.description }}</span>
+          </span>
+          <span class="substat__value">
+            <span>{{ substat.value }}</span>
+            <span v-if="substat.withUnit">{{ unit }}</span>
+          </span>
+        </template>
+      </div>
     </div>
   </div>
 </template>
@@ -56,6 +71,7 @@ const props = defineProps<{
   }
 
   .barContainer {
+    margin-bottom: 0.5rem;
     progress {
       --border-radius: 20px;
       width: 100%;
@@ -81,9 +97,42 @@ const props = defineProps<{
   }
 
   .mainStat {
+    width: 55%;
     display: flex;
     flex-direction: column;
     align-items: center;
+
+    .value {
+      font-size: 3rem;
+      line-height: 1;
+    }
+
+    .unit {
+      font-size: 0.9rem;
+      text-transform: uppercase;
+    }
+  }
+
+  .subStats {
+    flex: 1;
+    display: grid;
+    grid-template-columns: auto auto;
+
+    .substat__description {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      color: #414141;
+
+      span:nth-child(2) {
+        margin-left: 0.25rem;
+      }
+    }
+
+    .substat__value {
+      font-size: 0.8rem;
+      font-weight: 600;
+      justify-self: end;
+    }
   }
 }
 </style>

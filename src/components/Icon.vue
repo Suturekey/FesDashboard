@@ -18,7 +18,7 @@ defineProps<{
   display: inline-block;
   height: var(--dim);
   width: var(--dim);
-  mask-size: contain;
+  mask-size: cover;
   background-color: var(--colour);
   flex-shrink: 0;
 }

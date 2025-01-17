@@ -1,5 +1,6 @@
 import { defineStore } from "pinia";
 import { reactive, ref } from "vue";
+import { round } from "../utils";
 import type { I_AthleteStats, I_AthleteData } from "../../types";
 import type { Ref } from "vue";
 
@@ -9,10 +10,9 @@ function getRoundedAverage(
   newValue: number,
   decimalPlaces: number
 ) {
-  const ROUNDING_CONST = Math.pow(10, decimalPlaces);
   const newAverage =
     (prevAverage * (numMeasurements - 1) + newValue) / numMeasurements;
-  return Math.round(newAverage * ROUNDING_CONST) / ROUNDING_CONST;
+  return round(newAverage, decimalPlaces);
 }
 
 export const useAthleteStore = defineStore("athlete", () => {
