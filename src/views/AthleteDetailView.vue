@@ -24,7 +24,7 @@ const athlete = computed(
       ?.metrics
 );
 
-const stats = computed(() => athleteStore.athleteMap.get(props.id));
+const stats = computed(() => athleteStore.athleteAnalysis.get(props.id));
 
 const imageUrl = computed(
   () => new URL(`/src/data/images/${props.id}.jpg`, import.meta.url).href

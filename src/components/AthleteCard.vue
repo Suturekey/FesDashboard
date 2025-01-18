@@ -57,7 +57,7 @@ onMounted(() => {
           Erhöht
         </div>
         <div class="measurement">
-          <Icon icon="heartRate" size="xl" colour="var(--c-text)"></Icon>
+          <Icon icon="heartRate" size="xl"></Icon>
           <span class="measurement_value">{{
             athlete?.metrics.heartRate
           }}</span>
@@ -78,7 +78,7 @@ onMounted(() => {
       <div class="statDisplay speed">
         <span class="title">Geschwindigkeit</span>
         <div class="measurement">
-          <Icon icon="speed" size="xl" colour="#e5e5e5"></Icon>
+          <Icon icon="speed" size="xl"></Icon>
           <span class="measurement_value">{{ athlete?.metrics.speed }}</span>
           <span class="measurement_unit">MPH</span>
         </div>
