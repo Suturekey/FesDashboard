@@ -1,8 +1,6 @@
 <script setup lang="ts">
 import Icon from "./Icon.vue";
 
-interface I_CardDisplayData {}
-
 const props = defineProps<{
   header: string;
   icon: string;

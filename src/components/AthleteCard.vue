@@ -6,7 +6,7 @@ import type {
   I_FakeAthleteData,
 } from "../../types";
 import fakeData from "../data/fakeAthleteData";
-import { watch, ref, onMounted, computed } from "vue";
+import { ref, onMounted, computed } from "vue";
 
 const props = defineProps<{
   athlete: I_AthleteData;
