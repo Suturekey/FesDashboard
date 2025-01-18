@@ -164,6 +164,7 @@ function inRange(
   --image-dim: 130px;
   display: grid;
   width: 100%;
+  position: relative;
   height: auto;
   padding: 1rem;
   justify-items: center;
@@ -172,6 +173,15 @@ function inRange(
     width: var(--image-dim);
     aspect-ratio: 1;
     border-radius: 50%;
+    z-index: 1;
+  }
+
+  &::before {
+    content: "";
+    height: calc((var(--image-dim) + 1rem) * 0.75);
+    width: 100%;
+    position: absolute;
+    background-color: var(--c-accent);
   }
 }
 

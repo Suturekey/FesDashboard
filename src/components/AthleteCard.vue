@@ -57,7 +57,7 @@ onMounted(() => {
           Erhöht
         </div>
         <div class="measurement">
-          <Icon icon="heartRate" size="xl" colour="#e5e5e5"></Icon>
+          <Icon icon="heartRate" size="xl" colour="var(--c-text)"></Icon>
           <span class="measurement_value">{{
             athlete?.metrics.heartRate
           }}</span>
@@ -105,7 +105,7 @@ onMounted(() => {
   --border-radius: 8px;
   position: relative;
   padding: var(--padding);
-  background-color: var(--c-card-bg-dark);
+  background-color: var(--c-card-bg);
   color: var(--c-text-light);
   border-radius: var(--border-radius);
   display: flex;
@@ -140,11 +140,11 @@ onMounted(() => {
 
 .names {
   margin-left: calc(var(--image-dim) + var(--image-margin));
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.25rem;
 
   & > p {
     line-height: 1;
-    color: var(--c-text-dark);
+    color: var(--c-text);
   }
 
   .names--small {
@@ -202,7 +202,7 @@ onMounted(() => {
 
 .bottom {
   height: 120px;
-  background-color: var(--c-bg-dark-gray);
+  background-color: var(--c-bg-gray);
   border-radius: 9px;
   display: flex;
 
@@ -250,7 +250,7 @@ onMounted(() => {
 
   .badge {
     position: absolute;
-    background-color: rgb(from var(--c-card-bg-dark) r g b / 0.75);
+    background-color: rgb(from var(--c-card-bg) r g b / 0.75);
     padding: 0.3rem;
     border-radius: 4px;
     top: 1.2rem;

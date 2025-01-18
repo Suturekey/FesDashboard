@@ -20,7 +20,13 @@ onUnmounted(() => socket.close());
 </script>
 
 <template>
-  <router-view></router-view>
+  <router-view class="background"></router-view>
 </template>
 
-<style scoped></style>
+<style scoped>
+.background {
+  background-color: var(--c-bg);
+  overflow-y: auto;
+  min-height: 100%;
+}
+</style>

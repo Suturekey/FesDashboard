@@ -9,7 +9,7 @@ defineProps<{
 <template>
   <span
     :class="`icon icon--${icon} icon--${size ? size : 'm'}`"
-    :style="`--colour: ${colour ? colour : 'black'}`"
+    :style="`--colour: ${colour ? colour : 'var(--c-text)'}`"
   ></span>
 </template>
 

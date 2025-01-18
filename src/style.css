@@ -3,17 +3,30 @@
 @tailwind utilities;
 
 /* Colour scheme */
+/* Note that light/dark refers to the theme NOT the actual lightness of the colour */
 :root {
-  --c-card-bg-dark: #262626;
+  /* Light colour scheme */
   --c-card-bg-light: #ececec;
-  --c-bg-dark: #1b1b1b;
   --c-bg-light: #e5e5e5;
-  --c-bg-dark-gray: #3c3c3c;
-  --c-text-light: #e5e5e5;
-  --c-text-dark: #000000;
+  --c-bg-gray-light: #cecfd5;
+  --c-text-light: #000000;
+  --c-accent-light: #5d71b0;
+
+  /* Dark colour scheme */
+  --c-card-bg-dark: #262626;
+  --c-bg-dark: #1b1b1b;
+  --c-bg-gray-dark: #3c3c3c;
+  --c-text-dark: #e5e5e5;
+
   --c-text-gray: #414141;
-  --c-accent: #5d71b0;
   --c-accent-bright: #18abd3;
+
+  --c-bg: var(--c-bg-light);
+  --c-card-bg: var(--c-card-bg-light);
+  --c-bg-gray: var(--c-bg-gray-light);
+  --c-text: var(--c-text-light);
+  --c-text-gray: var(--c-text-gray);
+  --c-accent: var(--c-accent-light);
 }
 
 html,
