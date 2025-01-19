@@ -202,7 +202,7 @@ function inRange(
 }
 
 .stepsInfo {
-  color: #002fca;
+  color: var(--c-extra-message);
   font-size: 0.9rem;
   font-weight: 600;
 }

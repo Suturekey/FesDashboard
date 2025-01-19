@@ -11,7 +11,8 @@
   --c-bg-gray-light: #cecfd5;
   --c-text-light: #000000;
   --c-text-gray-light: #414141;
-  --c-accent-light: #5d71b0;
+  --c-accent-light: #42579b;
+  --c-extra-message-light: #002fca;
 
   /* Dark colour scheme */
   --c-card-bg-dark: #262626;
@@ -20,6 +21,7 @@
   --c-text-dark: #e5e5e5;
   --c-text-gray-dark: #bfbfbf;
   --c-accent-dark: #4f62a1;
+  --c-extra-message-dark: hsl(226, 77%, 78%);
 
   --c-accent-bright: #18abd3;
 
@@ -29,6 +31,7 @@
   --c-text: var(--c-text-light);
   --c-text-gray: var(--c-text-gray-light);
   --c-accent: var(--c-accent-light);
+  --c-extra-message: var(--c-extra-message-light);
 }
 
 @media (prefers-color-scheme: dark) {
@@ -39,6 +42,7 @@
     --c-text: var(--c-text-dark);
     --c-text-gray: var(--c-text-gray-dark);
     --c-accent: var(--c-accent-dark);
+    --c-extra-message: var(--c-extra-message-dark);
   }
 }
 
