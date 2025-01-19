@@ -29,7 +29,7 @@ function connectToWebSocket() {
 
   socket.onclose = (closeEvent) => {
     connectionLive.value = false;
-    console.info("The WebSocket server closed the connection", closeEvent);
+    console.warn("The WebSocket server closed the connection", closeEvent);
   };
 
   socket.onerror = (errorEvent) => {
@@ -58,7 +58,7 @@ setInterval(() => {
   if (socket) {
     socket.close();
   }
-}, 20000);
+}, 10000);
 
 onUnmounted(() => socket.close());
 </script>
@@ -92,6 +92,7 @@ onUnmounted(() => socket.close());
   position: absolute;
   left: 50%;
   translate: -50%;
+  width: clamp(300px, 80%, 500px);
 
   z-index: 99;
   color: var(--c-text-light);
@@ -102,7 +103,6 @@ onUnmounted(() => socket.close());
   flex-direction: column;
   gap: 0.5rem;
 
-  max-width: 500px;
   margin-top: 1rem;
 
   .message {

@@ -135,6 +135,10 @@ onMounted(() => {
     border-top-right-radius: var(--border-radius);
   }
 
+  &:hover {
+    cursor: pointer;
+  }
+
   & > div {
     z-index: 1;
   }

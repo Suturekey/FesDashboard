@@ -6,15 +6,23 @@ import { useAthleteStore } from "../stores/athleteStore";
 import fakeData from "../data/fakeAthleteData";
 import {
   Chart,
+  Colors,
   LineController,
   LineElement,
   PointElement,
   LinearScale,
   CategoryScale,
   Title,
+  type ChartOptions,
+  Tooltip,
 } from "chart.js";
 
 const athleteStore = useAthleteStore();
+
+const chartAthletes = new Map<string, boolean>();
+
+const maxDisplayedMeasurements = 30;
+let numMeasurements = 0;
 
 const canvas = useTemplateRef("speed-canvas");
 let speedChart: Chart;
@@ -24,6 +32,28 @@ function getFullFakeName(athleteId: string) {
   return `${fakeAthlete.firstName} ${fakeAthlete.lastName}`;
 }
 
+const chartOptions: ChartOptions = {
+  responsive: true,
+  maintainAspectRatio: false,
+  plugins: {
+    tooltip: {
+      enabled: true,
+      callbacks: {
+        footer: (tooltipItems) =>
+          getFullFakeName(tooltipItems[0].dataset.label!),
+      },
+    },
+  },
+};
+
+function createDataset(athleteId: string, data: (number | null)[]) {
+  chartAthletes.set(athleteId, true);
+  return {
+    label: athleteId,
+    data: data,
+  };
+}
+
 onMounted(() => {
   Chart.register(
     LineController,
@@ -31,24 +61,20 @@ onMounted(() => {
     PointElement,
     LinearScale,
     CategoryScale,
-    Title
+    Colors,
+    Title,
+    Tooltip
   );
 
   speedChart = new Chart(canvas.value!, {
     type: "line",
     data: {
-      labels: [...Array(30)].map((_, idx) => `-${idx}s`),
-      datasets: [...athleteStore.athleteDatasets.entries()].map((entry) => {
-        return {
-          label: entry[0],
-          data: entry[1].speed,
-        };
-      }),
+      labels: [],
+      datasets: [...athleteStore.athleteDatasets.entries()].map(
+        ([athleteId, data]) => createDataset(athleteId, data.speed)
+      ),
     },
-    options: {
-      responsive: true,
-      maintainAspectRatio: false,
-    },
+    options: chartOptions,
   });
 });
 
@@ -57,23 +83,35 @@ watch(
   () => {
     const speedValues = athleteStore.newSpeedValues;
 
+    if (speedChart.data.labels!.length >= maxDisplayedMeasurements) {
+      speedChart.data.labels?.shift();
+    }
+    speedChart.data.labels?.push(numMeasurements + 1);
+
+    /* Add new values from atheletes in the current batch of measurements to the chart */
     if (speedChart.data.datasets.length === 0) {
       speedChart.data.datasets = Object.entries(speedValues).map(
-        ([athleteId, speedValue]) => {
-          return {
-            label: athleteId,
-            data: [speedValue],
-          };
-        }
+        ([athleteId, speedValue]) => createDataset(athleteId, [speedValue])
       );
     } else {
       speedChart.data.datasets.forEach((dataset) => {
         const newValue = speedValues[dataset.label!];
-        dataset.data.push(newValue ? newValue : null);
+        if (dataset.data.length >= maxDisplayedMeasurements) {
+          dataset.data.shift();
+        }
+        dataset.data.push(!!newValue ? newValue : null);
       });
     }
 
+    /* Add datasets of athletes that are not already part of the chart */
+    Object.entries(speedValues).forEach(([athleteId, speedValue]) => {
+      if (!chartAthletes.get(athleteId)) {
+        createDataset(athleteId, [speedValue]);
+      }
+    });
+
     speedChart.update();
+    numMeasurements++;
   }
 );
 </script>
@@ -83,40 +121,37 @@ watch(
     <div class="chartContainer">
       <canvas ref="speed-canvas" style="max-width: 100%"></canvas>
     </div>
-    <div class="athleteRanking">
-      <div
-        v-if="athleteStore.speedRecord.recordValue > 0"
-        class="athleteOfTheDay"
-      >
-        <span class="heading">Athlet des Tages</span>
-        <span class="name">{{
-          getFullFakeName(athleteStore.speedRecord.athleteId)
-        }}</span>
-        <span class="recordData">
-          <span>
-            <Icon icon="speed"></Icon>
-            {{ athleteStore.speedRecord.recordValue }} MPH</span
-          >
-          <span>
-            <Icon icon="clock"></Icon>
-            {{
-              athleteStore.speedRecord.timestamp.toLocaleTimeString("de-DE")
-            }}</span
-          >
-        </span>
-      </div>
-      <div class="athleteList">
-        <AthleteCard
-          v-for="athlete in athleteStore.athleteList"
-          :key="athlete.athleteId"
-          :athlete="athlete"
-          :stats="athleteStore.athleteAnalysis.get(athlete.athleteId)"
-          :holds-record="
-            athleteStore.speedRecord.athleteId === athlete.athleteId
-          "
-          @click="$router.push(`/athlete/${athlete.athleteId}`)"
-        ></AthleteCard>
-      </div>
+    <div class="athleteRanking"></div>
+    <div
+      v-if="athleteStore.speedRecord.recordValue > 0"
+      class="athleteOfTheDay"
+    >
+      <span class="heading">Athlet des Tages</span>
+      <span class="name">{{
+        getFullFakeName(athleteStore.speedRecord.athleteId)
+      }}</span>
+      <span class="recordData">
+        <span>
+          <Icon icon="speed"></Icon>
+          {{ athleteStore.speedRecord.recordValue }} MPH</span
+        >
+        <span>
+          <Icon icon="clock"></Icon>
+          {{
+            athleteStore.speedRecord.timestamp.toLocaleTimeString("de-DE")
+          }}</span
+        >
+      </span>
+    </div>
+    <div class="athleteList">
+      <AthleteCard
+        v-for="athlete in athleteStore.athleteList"
+        :key="athlete.athleteId"
+        :athlete="athlete"
+        :stats="athleteStore.athleteAnalysis.get(athlete.athleteId)"
+        :holds-record="athleteStore.speedRecord.athleteId === athlete.athleteId"
+        @click="$router.push(`/athlete/${athlete.athleteId}`)"
+      ></AthleteCard>
     </div>
   </div>
 </template>
@@ -133,7 +168,6 @@ watch(
   position: relative;
   width: clamp(300px, 100%, 700px);
   height: 500px;
-  border: solid red 2px;
   margin-bottom: 2rem;
 }
 
@@ -193,16 +227,30 @@ watch(
   .viewContainer {
     padding-inline: 200px;
     grid-template-columns: auto auto;
+    grid-template-rows: min-content 1fr;
   }
 
   .chartContainer {
+    grid-column: 1/2;
+    grid-row: 1/-1;
     align-self: center;
     width: clamp(300px, 100%, 1000px);
   }
 
+  .athleteOfTheDay {
+    grid-column: 2/-1;
+    grid-row: 1;
+  }
+
   .athleteList {
+    grid-row: 2;
+    grid-column: 2/-1;
     height: 80vh;
     overflow: auto;
+    padding: 2rem;
+
+    scrollbar-color: var(--c-accent) var(--c-bg-gray);
+    scrollbar-width: thin;
   }
 }
 </style>
