@@ -46,6 +46,7 @@ function reconnect() {
     }
   }, 5000);
   attemptingReconnect.value = true;
+  displayFailedConnInfo.value = false;
   connectToWebSocket();
 }
 
@@ -66,24 +67,15 @@ onUnmounted(() => socket.close());
   <div v-if="!connectionLive" class="warning">
     <span class="message">
       <Icon icon="warning" colour="#ff0000" size="l"></Icon>
-      <span>
-        <span class="bold">Achtung: </span>
-        Die Verbindung zum Server wurde unterbrochen.
-      </span>
+      <span class="bold"> Die Verbindung zum Server ist unterbrochen. </span>
     </span>
     <span
       v-if="displayFailedConnInfo && !attemptingReconnect"
       class="failedConn"
       >Info: Neuverbindung fehlgeschlagen</span
     >
-    <button @click="reconnect" :disable="attemptingReconnect">
-      <Icon
-        icon="reload"
-        :colour="`var(--c-text-light)`"
-        :class="{
-          reconnecting: attemptingReconnect,
-        }"
-      ></Icon>
+    <button @click="reconnect" :disabled="attemptingReconnect">
+      <Icon icon="reload" :colour="`var(--c-text-light)`" class="icon"></Icon>
       {{ attemptingReconnect ? "Baue Verbindung auf..." : "Neu verbinden" }}
     </button>
   </div>
@@ -100,7 +92,6 @@ onUnmounted(() => socket.close());
   color: var(--c-text-light);
   background-color: #fdedee;
   padding: 1rem;
-  margin-bottom: 1rem;
   border-radius: 9px;
   display: flex;
   flex-direction: column;
@@ -108,6 +99,7 @@ onUnmounted(() => socket.close());
 
   max-width: 500px;
   margin: 1rem;
+  margin-inline: auto;
 
   .message {
     display: flex;
@@ -140,10 +132,10 @@ onUnmounted(() => socket.close());
       background-color: var(--c-bg-gray-light);
 
       .icon {
-      animation-name: rotation;
+        animation-name: rotation;
         animation-duration: 1.7s;
-      animation-iteration-count: infinite;
-      animation-timing-function: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        animation-iteration-count: infinite;
+        animation-timing-function: cubic-bezier(0.68, -0.55, 0.265, 1.55);
       }
     }
   }

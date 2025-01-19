@@ -56,7 +56,8 @@ function inRange(
       :alt="`Portrait of ${fakeAthleteData?.firstName} ${fakeAthleteData?.lastName}`"
     />
     <div class="names">
-      <span class="bigName">{{ fakeAthleteData.lastName }}</span>
+      <span class="bigName">{{ fakeAthleteData.lastName }}</span
+      >,
       <span class="smallName">{{ fakeAthleteData.firstName }}</span>
     </div>
     <div class="metricCards">

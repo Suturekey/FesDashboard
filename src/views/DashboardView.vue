@@ -95,7 +95,7 @@ watch(
       <span class="name">{{
         getFullFakeName(athleteStore.speedRecord.athleteId)
       }}</span>
-      <span class="timestamp">
+      <span class="recordData">
         <span>
           <Icon icon="speed"></Icon>
           {{ athleteStore.speedRecord.recordValue }} MPH</span
@@ -122,11 +122,19 @@ watch(
 </template>
 
 <style scoped>
+.viewContainer {
+  --padding: 1rem;
+  padding: var(--padding);
+  gap: 1rem;
+  display: grid;
+}
+
 .chartContainer {
   max-width: 900px;
 }
 
 .athleteOfTheDay {
+  justify-self: center;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -134,6 +142,8 @@ watch(
   border: solid 2px rgb(172, 125, 6);
   border-radius: 9px;
   padding: 0.75rem;
+  width: 100%;
+  max-width: 450px;
 
   .heading {
     font-weight: 600;
@@ -146,10 +156,10 @@ watch(
     margin-block: 0.5rem;
   }
 
-  .timestamp {
+  .recordData {
     gap: 0.5rem;
     color: var(--c-text-gray);
-    font-size: 0.8rem;
+    font-size: 0.9rem;
     display: flex;
 
     & > span {
