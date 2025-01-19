@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import Icon from "./components/Icon.vue";
 import { onUnmounted } from "vue";
 import { useAthleteStore } from "./stores/athleteStore";
 import type { I_AthleteData } from "./../types";
