@@ -12,11 +12,19 @@ import {
   Title,
 } from "chart.js";
 
+const athleteStore = useAthleteStore();
+
 const canvas = useTemplateRef("speed-canvas");
-
-const labels = [...Array(60)].map((_, idx) => `-${idx}s`);
-
 let speedChart: Chart;
+
+function getSpeedDatasets() {
+  return [...athleteStore.athleteDatasets.entries()].map((entry) => {
+    return {
+      label: entry[0],
+      data: entry[1].speed,
+    };
+  });
+}
 
 onMounted(() => {
   Chart.register(
@@ -28,16 +36,13 @@ onMounted(() => {
     Title
   );
 
+  const datasets = getSpeedDatasets();
+
   speedChart = new Chart(canvas.value!, {
     type: "line",
     data: {
-      labels: labels,
-      datasets: [
-        {
-          label: "Something",
-          data: [1, 2, 10],
-        },
-      ],
+      labels: [...Array(60)].map((_, idx) => `-${idx}s`),
+      datasets: datasets,
     },
     options: {
       responsive: true,
@@ -50,14 +55,27 @@ onMounted(() => {
   });
 });
 
-const athleteStore = useAthleteStore();
-
 watch(
   () => athleteStore.athleteList,
   () => {
-    speedChart.data.datasets.forEach((dataset) => {
-      dataset.data.push(1);
-    });
+    const speedValues = athleteStore.newSpeedValues;
+
+    if (speedChart.data.datasets.length === 0) {
+      speedChart.data.datasets = Object.entries(speedValues).map(
+        ([athleteId, speedValue]) => {
+          return {
+            label: athleteId,
+            data: [speedValue],
+          };
+        }
+      );
+    } else {
+      speedChart.data.datasets.forEach((dataset) => {
+        const newValue = speedValues[dataset.label!];
+        dataset.data.push(newValue ? newValue : null);
+      });
+    }
+
     speedChart.update();
   }
 );

@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-import { reactive, ref } from "vue";
+import { computed, reactive, ref } from "vue";
 import { round } from "../utils";
 import type { I_AthleteStats, I_AthleteData } from "../../types";
 import type { Ref, Reactive } from "vue";
@@ -92,6 +92,13 @@ export const useAthleteStore = defineStore("athlete", () => {
   const athleteAnalysis = reactive(new Map<string, I_AthleteStats>());
   const athleteDatasets = reactive(new Map<string, I_AthleteDataset>());
 
+  const newSpeedValues = computed(() => {
+    return athleteList.value.reduce((acc: Record<string, number>, cur) => {
+      acc[cur.athleteId] = cur.metrics.speed;
+      return acc;
+    }, {});
+  });
+
   function replaceList(newList: I_AthleteData[]) {
     athleteList.value = newList;
     const athleteIds = new Map();
@@ -131,5 +138,6 @@ export const useAthleteStore = defineStore("athlete", () => {
     replaceList,
     athleteAnalysis,
     athleteDatasets,
+    newSpeedValues,
   };
 });
