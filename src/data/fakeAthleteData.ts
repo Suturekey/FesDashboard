@@ -50,3 +50,11 @@ Object.values(athletes).forEach((athlete) => {
 });
 
 export default athletes as Record<string, I_FakeAthleteData>;
+
+export const unknownAthlete: I_FakeAthleteData = {
+  firstName: "John",
+  lastName: "Doe",
+  stepGoal: 10000,
+  stepRecord: 12000,
+  speedRecord: 20,
+};

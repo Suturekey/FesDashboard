@@ -4,7 +4,7 @@ import MetricCard from "../components/MetricCard.vue";
 import type { I_FakeAthleteData } from "../../types";
 import { useAthleteStore } from "../stores/athleteStore";
 import { round } from "../utils";
-import fakeData from "../data/fakeAthleteData";
+import fakeData, { unknownAthlete } from "../data/fakeAthleteData";
 import { ref, computed } from "vue";
 
 const props = defineProps<{
@@ -14,9 +14,8 @@ const props = defineProps<{
 const athleteStore = useAthleteStore();
 
 const fakeAthleteData = ref();
-fakeAthleteData.value = (fakeData as Record<string, I_FakeAthleteData>)[
-  props.id
-];
+fakeAthleteData.value =
+  (fakeData as Record<string, I_FakeAthleteData>)[props.id] || unknownAthlete;
 
 const athlete = computed(
   () =>
@@ -189,6 +188,7 @@ function inRange(
   aspect-ratio: 1;
   border-radius: 50%;
   z-index: 1;
+  background-color: var(--c-accent-bright);
 }
 
 .names {

@@ -5,7 +5,7 @@ import type {
   I_AthleteStats,
   I_FakeAthleteData,
 } from "../../types";
-import fakeData from "../data/fakeAthleteData";
+import fakeData, { unknownAthlete } from "../data/fakeAthleteData";
 import { ref, onMounted, computed } from "vue";
 
 const props = defineProps<{
@@ -23,9 +23,9 @@ const imageUrl = computed(
 );
 
 onMounted(() => {
-  fakeAthleteData.value = (fakeData as Record<string, I_FakeAthleteData>)[
-    props.athlete.athleteId
-  ];
+  fakeAthleteData.value =
+    (fakeData as Record<string, I_FakeAthleteData>)[props.athlete.athleteId] ||
+    unknownAthlete;
 });
 </script>
 
@@ -148,6 +148,7 @@ onMounted(() => {
     width: var(--image-dim);
     aspect-ratio: 1;
     border-radius: 50%;
+    background-color: var(--c-accent-bright);
   }
 }
 

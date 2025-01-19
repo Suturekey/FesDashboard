@@ -3,7 +3,7 @@ import Icon from "../components/Icon.vue";
 import AthleteCard from "../components/AthleteCard.vue";
 import { onMounted, useTemplateRef, watch } from "vue";
 import { useAthleteStore } from "../stores/athleteStore";
-import fakeData from "../data/fakeAthleteData";
+import fakeData, { unknownAthlete } from "../data/fakeAthleteData";
 import {
   Chart,
   Colors,
@@ -28,7 +28,7 @@ const canvas = useTemplateRef("speed-canvas");
 let speedChart: Chart;
 
 function getFullFakeName(athleteId: string) {
-  const fakeAthlete = fakeData[athleteId];
+  const fakeAthlete = fakeData[athleteId] || unknownAthlete;
   return `${fakeAthlete.firstName} ${fakeAthlete.lastName}`;
 }
 
@@ -99,14 +99,17 @@ watch(
         if (dataset.data.length >= maxDisplayedMeasurements) {
           dataset.data.shift();
         }
-        dataset.data.push(!!newValue ? newValue : null);
+        dataset.data.push(typeof newValue === "number" ? newValue : null);
       });
     }
 
     /* Add datasets of athletes that are not already part of the chart */
     Object.entries(speedValues).forEach(([athleteId, speedValue]) => {
       if (!chartAthletes.get(athleteId)) {
-        createDataset(athleteId, [speedValue]);
+        const nullPadding = new Array(
+          Math.min(numMeasurements, maxDisplayedMeasurements - 1)
+        ).fill(null);
+        createDataset(athleteId, [...nullPadding, speedValue]);
       }
     });
 
@@ -167,7 +170,7 @@ watch(
   justify-self: center;
   position: relative;
   width: clamp(300px, 100%, 700px);
-  height: 500px;
+  height: clamp(500px, 500px, 50%);
   margin-bottom: 2rem;
 }
 
