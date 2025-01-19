@@ -1,7 +1,9 @@
 <script setup lang="ts">
-import { onMounted, useTemplateRef, watch } from "vue";
+import Icon from "../components/Icon.vue";
 import AthleteCard from "../components/AthleteCard.vue";
+import { onMounted, useTemplateRef, watch } from "vue";
 import { useAthleteStore } from "../stores/athleteStore";
+import fakeData from "../data/fakeAthleteData";
 import {
   Chart,
   LineController,
@@ -17,13 +19,9 @@ const athleteStore = useAthleteStore();
 const canvas = useTemplateRef("speed-canvas");
 let speedChart: Chart;
 
-function getSpeedDatasets() {
-  return [...athleteStore.athleteDatasets.entries()].map((entry) => {
-    return {
-      label: entry[0],
-      data: entry[1].speed,
-    };
-  });
+function getFullFakeName(athleteId: string) {
+  const fakeAthlete = fakeData[athleteId];
+  return `${fakeAthlete.firstName} ${fakeAthlete.lastName}`;
 }
 
 onMounted(() => {
@@ -36,13 +34,16 @@ onMounted(() => {
     Title
   );
 
-  const datasets = getSpeedDatasets();
-
   speedChart = new Chart(canvas.value!, {
     type: "line",
     data: {
-      labels: [...Array(60)].map((_, idx) => `-${idx}s`),
-      datasets: datasets,
+      labels: [...Array(30)].map((_, idx) => `-${idx}s`),
+      datasets: [...athleteStore.athleteDatasets.entries()].map((entry) => {
+        return {
+          label: entry[0],
+          data: entry[1].speed,
+        };
+      }),
     },
     options: {
       responsive: true,
@@ -83,12 +84,37 @@ watch(
 
 <template>
   <div>
-    <canvas ref="speed-canvas"></canvas>
+    <div class="chartContainer">
+      <canvas ref="speed-canvas"></canvas>
+    </div>
+    <div
+      v-if="athleteStore.speedRecord.recordValue > 0"
+      class="athleteOfTheDay"
+    >
+      <span class="heading">Athlet des Tages</span>
+      <span class="name">{{
+        getFullFakeName(athleteStore.speedRecord.athleteId)
+      }}</span>
+      <span class="timestamp">
+        <span>
+          <Icon icon="speed"></Icon>
+          {{ athleteStore.speedRecord.recordValue }} MPH</span
+        >
+        <span>
+          <Icon icon="clock"></Icon>
+          {{
+            athleteStore.speedRecord.timestamp.toLocaleTimeString("de-DE")
+          }}</span
+        >
+      </span>
+    </div>
     <div class="athleteList">
       <AthleteCard
         v-for="athlete in athleteStore.athleteList"
+        :key="athlete.athleteId"
         :athlete="athlete"
         :stats="athleteStore.athleteAnalysis.get(athlete.athleteId)"
+        :holds-record="athleteStore.speedRecord.athleteId === athlete.athleteId"
         @click="$router.push(`/athlete/${athlete.athleteId}`)"
       ></AthleteCard>
     </div>
@@ -96,10 +122,47 @@ watch(
 </template>
 
 <style scoped>
+.chartContainer {
+  max-width: 900px;
+}
+
+.athleteOfTheDay {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: rgb(from #b38d1a r g b / 0.22);
+  border: solid 2px rgb(172, 125, 6);
+  border-radius: 9px;
+  padding: 0.75rem;
+
+  .heading {
+    font-weight: 600;
+    font-size: 0.8rem;
+  }
+
+  .name {
+    font-size: 1.4rem;
+    font-weight: 600;
+    margin-block: 0.5rem;
+  }
+
+  .timestamp {
+    gap: 0.5rem;
+    color: var(--c-text-gray);
+    font-size: 0.8rem;
+    display: flex;
+
+    & > span {
+      display: flex;
+      gap: 0.25rem;
+      align-items: center;
+    }
+  }
+}
+
 .athleteList {
   display: grid;
   gap: 1em;
-  padding: 1em;
   max-width: 600px;
 }
 </style>

@@ -57,15 +57,21 @@ defineProps<{
   mask-image: url("@/assets/icons/metronome.svg");
 }
 .icon--heart {
-  mask-image: ("@/assets/icons/heart.svg");
+  mask-image: url("@/assets/icons/heart.svg");
+}
+.icon--clock {
+  mask-image: url("@/assets/icons/iconmonstr-time-3.svg");
+}
+.icon--medal {
+  mask-image: url("@/assets/icons/medal.svg");
 }
 .icon--sun-moon {
-  mask-image: ("@/assets/icons/theme-light-dark.svg");
+  mask-image: url("@/assets/icons/theme-light-dark.svg");
 }
 .icon--sun {
-  mask-image: ("@/assets/icons/wb-sunny.svg");
+  mask-image: url("@/assets/icons/wb-sunny.svg");
 }
 .icon--moon {
-  mask-image: ("@/assets/icons/moon-fill.svg");
+  mask-image: url("@/assets/icons/moon-fill.svg");
 }
 </style>

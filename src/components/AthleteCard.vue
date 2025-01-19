@@ -11,6 +11,7 @@ import { ref, onMounted, computed } from "vue";
 const props = defineProps<{
   athlete: I_AthleteData;
   stats?: I_AthleteStats;
+  holdsRecord?: boolean;
 }>();
 
 const fakeAthleteData = ref();
@@ -34,9 +35,12 @@ onMounted(() => {
       :src="imageUrl"
       :alt="`Portrait of ${fakeAthleteData?.firstName} ${fakeAthleteData?.lastName}`"
     />
-    <div class="names">
-      <p class="names--small">{{ fakeAthleteData?.firstName }}</p>
-      <p class="names--big">{{ fakeAthleteData?.lastName }}</p>
+    <div class="header">
+      <div class="names">
+        <p class="names--small">{{ fakeAthleteData?.firstName }}</p>
+        <p class="names--big">{{ fakeAthleteData?.lastName }}</p>
+      </div>
+      <Icon v-if="holdsRecord" icon="medal" size="xl" class="recordIcon"></Icon>
     </div>
     <div class="steps">
       <progress
@@ -138,24 +142,33 @@ onMounted(() => {
   }
 }
 
-.names {
+.header {
   margin-left: calc(var(--image-dim) + var(--image-margin));
   margin-bottom: 0.25rem;
+  display: flex;
 
-  & > p {
-    line-height: 1;
-    color: var(--c-text);
+  .names {
+    & > p {
+      line-height: 1;
+      color: var(--c-text);
+    }
+
+    .names--small {
+      margin-left: -10px;
+      font-size: 0.9rem;
+    }
+
+    .names--big {
+      font-size: 1.8rem;
+    }
   }
 
-  .names--small {
-    margin-left: -10px;
-    font-size: 0.9rem;
-  }
-
-  .names--big {
-    font-size: 1.8rem;
+  .recordIcon {
+    margin-left: auto;
+    align-self: center;
   }
 }
+
 .steps {
   margin-left: calc(var(--image-dim) + var(--image-margin));
   margin-bottom: 1.5rem;

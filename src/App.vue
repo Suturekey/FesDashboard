@@ -27,5 +27,6 @@ onUnmounted(() => socket.close());
 .background {
   overflow-y: auto;
   min-height: 100%;
+  padding: 1rem;
 }
 </style>

@@ -9,6 +9,12 @@ interface I_AthleteDataset {
   speed: (number | null)[];
 }
 
+interface I_SpeedRecord {
+  athleteId: string;
+  recordValue: number;
+  timestamp: Date;
+}
+
 /**
  * Calculates a new average given a new value and rounds them to the specified number of decimal places
  * @param prevAverage The previous average value
@@ -30,12 +36,14 @@ function getRoundedAverage(
 
 /**
  * Performs an analysis of the athlete's speed and heartrate and stores the results (min, max, average)
- * in the analysis map to be displayed as stats
+ * in the analysis map to be displayed as stats. Also updates the speed record if applicable
  * @param analysisMap A reference to the store's analysis map
+ * @param speedRecord A reference to the store's current speed record
  * @param athleteData A given athlete's data
  */
 function analyseCurrentAthleteData(
   analysisMap: Reactive<Map<string, I_AthleteStats>>,
+  speedRecord: Ref<I_SpeedRecord>,
   athleteData: I_AthleteData
 ) {
   const curHeartRate = athleteData.metrics.heartRate;
@@ -71,6 +79,14 @@ function analyseCurrentAthleteData(
 
   if (curSpeed > data!.speed.max) {
     data!.speed.max = curSpeed;
+
+    if (curSpeed > speedRecord.value.recordValue) {
+      speedRecord.value = {
+        athleteId: athleteData.athleteId,
+        recordValue: curSpeed,
+        timestamp: new Date(athleteData.timestamp),
+      };
+    }
   }
 
   data!.heartRate.avg = getRoundedAverage(
@@ -91,6 +107,11 @@ export const useAthleteStore = defineStore("athlete", () => {
   const athleteList: Ref<I_AthleteData[]> = ref([]);
   const athleteAnalysis = reactive(new Map<string, I_AthleteStats>());
   const athleteDatasets = reactive(new Map<string, I_AthleteDataset>());
+  const speedRecord: Ref<I_SpeedRecord> = ref({
+    athleteId: "",
+    recordValue: 0,
+    timestamp: new Date(),
+  }); // Athlete with the highest max speed measured (should be initialized using previous data if possible)
 
   const newSpeedValues = computed(() => {
     return athleteList.value.reduce((acc: Record<string, number>, cur) => {
@@ -105,7 +126,7 @@ export const useAthleteStore = defineStore("athlete", () => {
 
     newList.forEach((curData) => {
       /* Add analysis data to analysis map for display on cards */
-      analyseCurrentAthleteData(athleteAnalysis, curData);
+      analyseCurrentAthleteData(athleteAnalysis, speedRecord, curData);
 
       /* Add live values to dataset map for display in graphs */
       athleteIds.set(curData.athleteId, true);
@@ -135,9 +156,10 @@ export const useAthleteStore = defineStore("athlete", () => {
 
   return {
     athleteList,
-    replaceList,
     athleteAnalysis,
     athleteDatasets,
+    speedRecord,
     newSpeedValues,
+    replaceList,
   };
 });
