@@ -58,7 +58,7 @@ setInterval(() => {
   if (socket) {
     socket.close();
   }
-}, 10000);
+}, 20000);
 
 onUnmounted(() => socket.close());
 </script>
@@ -89,6 +89,11 @@ onUnmounted(() => socket.close());
 }
 
 .warning {
+  position: absolute;
+  left: 50%;
+  translate: -50%;
+
+  z-index: 99;
   color: var(--c-text-light);
   background-color: #fdedee;
   padding: 1rem;
@@ -98,8 +103,7 @@ onUnmounted(() => socket.close());
   gap: 0.5rem;
 
   max-width: 500px;
-  margin: 1rem;
-  margin-inline: auto;
+  margin-top: 1rem;
 
   .message {
     display: flex;

@@ -47,11 +47,7 @@ onMounted(() => {
     },
     options: {
       responsive: true,
-      scales: {
-        x: {
-          reverse: true,
-        },
-      },
+      maintainAspectRatio: false,
     },
   });
 });
@@ -83,54 +79,62 @@ watch(
 </script>
 
 <template>
-  <div>
+  <div class="viewContainer">
     <div class="chartContainer">
-      <canvas ref="speed-canvas"></canvas>
+      <canvas ref="speed-canvas" style="max-width: 100%"></canvas>
     </div>
-    <div
-      v-if="athleteStore.speedRecord.recordValue > 0"
-      class="athleteOfTheDay"
-    >
-      <span class="heading">Athlet des Tages</span>
-      <span class="name">{{
-        getFullFakeName(athleteStore.speedRecord.athleteId)
-      }}</span>
-      <span class="recordData">
-        <span>
-          <Icon icon="speed"></Icon>
-          {{ athleteStore.speedRecord.recordValue }} MPH</span
-        >
-        <span>
-          <Icon icon="clock"></Icon>
-          {{
-            athleteStore.speedRecord.timestamp.toLocaleTimeString("de-DE")
-          }}</span
-        >
-      </span>
-    </div>
-    <div class="athleteList">
-      <AthleteCard
-        v-for="athlete in athleteStore.athleteList"
-        :key="athlete.athleteId"
-        :athlete="athlete"
-        :stats="athleteStore.athleteAnalysis.get(athlete.athleteId)"
-        :holds-record="athleteStore.speedRecord.athleteId === athlete.athleteId"
-        @click="$router.push(`/athlete/${athlete.athleteId}`)"
-      ></AthleteCard>
+    <div class="athleteRanking">
+      <div
+        v-if="athleteStore.speedRecord.recordValue > 0"
+        class="athleteOfTheDay"
+      >
+        <span class="heading">Athlet des Tages</span>
+        <span class="name">{{
+          getFullFakeName(athleteStore.speedRecord.athleteId)
+        }}</span>
+        <span class="recordData">
+          <span>
+            <Icon icon="speed"></Icon>
+            {{ athleteStore.speedRecord.recordValue }} MPH</span
+          >
+          <span>
+            <Icon icon="clock"></Icon>
+            {{
+              athleteStore.speedRecord.timestamp.toLocaleTimeString("de-DE")
+            }}</span
+          >
+        </span>
+      </div>
+      <div class="athleteList">
+        <AthleteCard
+          v-for="athlete in athleteStore.athleteList"
+          :key="athlete.athleteId"
+          :athlete="athlete"
+          :stats="athleteStore.athleteAnalysis.get(athlete.athleteId)"
+          :holds-record="
+            athleteStore.speedRecord.athleteId === athlete.athleteId
+          "
+          @click="$router.push(`/athlete/${athlete.athleteId}`)"
+        ></AthleteCard>
+      </div>
     </div>
   </div>
 </template>
 
 <style scoped>
 .viewContainer {
-  --padding: 1rem;
-  padding: var(--padding);
   gap: 1rem;
+  padding: 1rem;
   display: grid;
 }
 
 .chartContainer {
-  max-width: 900px;
+  justify-self: center;
+  position: relative;
+  width: clamp(300px, 100%, 700px);
+  height: 500px;
+  border: solid red 2px;
+  margin-bottom: 2rem;
 }
 
 .athleteOfTheDay {
@@ -144,6 +148,7 @@ watch(
   padding: 0.75rem;
   width: 100%;
   max-width: 450px;
+  margin-bottom: 1rem;
 
   .heading {
     font-weight: 600;
@@ -181,6 +186,23 @@ watch(
 @media screen and (min-width: 425px) {
   .athleteList {
     gap: 1.5rem;
+  }
+}
+
+@media screen and (min-width: 1440px) {
+  .viewContainer {
+    padding-inline: 200px;
+    grid-template-columns: auto auto;
+  }
+
+  .chartContainer {
+    align-self: center;
+    width: clamp(300px, 100%, 1000px);
+  }
+
+  .athleteList {
+    height: 80vh;
+    overflow: auto;
   }
 }
 </style>
