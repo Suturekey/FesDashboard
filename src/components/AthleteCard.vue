@@ -57,11 +57,19 @@ onMounted(() => {
     <div class="bottom">
       <div class="statDisplay heartRate">
         <span class="title">Herzfrequenz</span>
-        <!-- <div class="badge" v-if="athlete && athlete.metrics.heartRate > 142">
-          Erhöht
-        </div> -->
-        <div class="measurement">
-          <Icon icon="heartRate" size="l"></Icon>
+        <div
+          :class="{
+            measurement: true,
+            elevated: athlete.metrics.heartRate > 100,
+            high: athlete.metrics.heartRate > 180,
+          }"
+        >
+          <Icon
+            icon="heartRate"
+            size="l"
+            colour="var(--icon-colour)"
+            class="icon"
+          ></Icon>
           <span class="measurement__value">{{
             athlete?.metrics.heartRate
           }}</span>
@@ -263,6 +271,29 @@ onMounted(() => {
   flex-basis: 100%;
 }
 
+.heartRate .measurement {
+  --icon-colour: var(--c-text);
+
+  &.elevated {
+    --icon-colour: var(--c-hr-elevated);
+
+    .icon {
+      animation-name: pulsate;
+      animation-duration: 0.8s;
+      animation-iteration-count: infinite;
+      animation-timing-function: cubic-bezier(0.6, 0.04, 0.98, 0.335);
+    }
+  }
+
+  &.high {
+    --icon-colour: var(--c-hr-high);
+
+    .icon {
+      animation-duration: 0.5s;
+    }
+  }
+}
+
 .stats {
   display: flex;
   gap: 0.4rem;
@@ -281,21 +312,19 @@ onMounted(() => {
   z-index: -1;
   background-color: var(--c-bg-gray);
   width: 100%;
-  height: 82%;
+  height: 78%;
   bottom: 0;
   left: 0;
   border-radius: 9px;
+}
 
-  /* position: relative;
-
-  .badge {
-    position: absolute;
-    background-color: rgb(from var(--c-card-bg) r g b / 0.75);
-    padding: 0.3rem;
-    border-radius: 4px;
-    top: 1.2rem;
-    font-size: 0.8rem;
-  } */
+@keyframes pulsate {
+  from {
+    scale: 1;
+  }
+  to {
+    scale: 1.3;
+  }
 }
 
 @media screen and (min-width: 425px) {

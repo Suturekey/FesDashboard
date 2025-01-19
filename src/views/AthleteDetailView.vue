@@ -37,14 +37,37 @@ const elevation = computed(
   () => `${round((athlete.value?.steps ?? 0) * 0.002, 0)} m`
 );
 
-function inRange(
-  value: number | undefined,
-  rangeStart: number,
-  rangeEnd: number
-) {
-  if (!value) value = 0;
-  return value >= rangeStart && value <= rangeEnd;
-}
+const heartRateIntensity = computed(() => {
+  enum hrDescriptor {
+    LOW = "low",
+    NORMAL = "normal",
+    ELEVATED = "elevated",
+    HIGH = "high",
+  }
+  const heartRate = athlete.value?.heartRate ?? 0;
+  let text = "";
+  let modifier = "";
+
+  if (heartRate > 180) {
+    text = "Sehr Hoch";
+    modifier = hrDescriptor.HIGH;
+  } else if (heartRate > 100) {
+    text = "Erhöht";
+    modifier = hrDescriptor.ELEVATED;
+  } else if (heartRate > 60) {
+    text = "Normal";
+    modifier = hrDescriptor.NORMAL;
+  } else {
+    text = "Niedrig";
+    modifier = hrDescriptor.LOW;
+  }
+
+  return {
+    colour: `var(--c-hr-${modifier})`,
+    class: `hr--${modifier}`,
+    text: text,
+  };
+});
 </script>
 
 <template>
@@ -66,7 +89,9 @@ function inRange(
         icon="steps"
         unit="Schritte"
         :liveMetric="athlete?.steps ?? 0"
-        :progressMax="fakeAthleteData.stepGoal"
+        :progress="{
+          max: fakeAthleteData.stepGoal,
+        }"
         :substats="[
           {
             icon: 'crown',
@@ -102,7 +127,10 @@ function inRange(
         icon="heartRate"
         unit="bpm"
         :liveMetric="athlete?.heartRate ?? 0"
-        :progressMax="250"
+        :progress="{
+          max: 250,
+          colour: heartRateIntensity.colour,
+        }"
         :substats="[
           {
             description: 'Minimum',
@@ -122,14 +150,17 @@ function inRange(
         ]"
       >
         <template v-slot:metricExtra>
-          <div>
-            <Icon icon="heart" size="m"></Icon>
-            <span v-if="inRange(athlete?.heartRate, 0, 59)">Niedrig</span>
-            <span v-else-if="inRange(athlete?.heartRate, 60, 100)">Normal</span>
-            <span v-else-if="inRange(athlete?.heartRate, 101, 180)"
-              >Erhöht</span
-            >
-            <span v-else>Sehr Hoch</span>
+          <div class="heartRateIndicator">
+            <Icon
+              icon="heart"
+              size="m"
+              :colour="heartRateIntensity.colour"
+              :class="{
+                hrIcon: true,
+                [heartRateIntensity.class]: true,
+              }"
+            ></Icon>
+            <span>{{ heartRateIntensity.text }}</span>
           </div>
         </template>
       </MetricCard>
@@ -139,7 +170,9 @@ function inRange(
         icon="speed"
         unit="MPH"
         :liveMetric="athlete?.speed ?? 0"
-        :progressMax="30"
+        :progress="{
+          max: 30,
+        }"
         :substats="[
           {
             icon: 'crown',
@@ -218,6 +251,39 @@ function inRange(
   color: var(--c-extra-message);
   font-size: 0.9rem;
   font-weight: 600;
+}
+
+.heartRateIndicator {
+  display: flex;
+  gap: 0.25rem;
+  align-items: center;
+}
+
+.hrIcon {
+  animation-name: pulsate;
+  animation-timing-function: cubic-bezier(0.6, 0.04, 0.98, 0.335);
+  animation-iteration-count: infinite;
+}
+.hr--low {
+  animation-duration: 1.2s;
+}
+.hr--normal {
+  animation-duration: 1s;
+}
+.hr--elevated {
+  animation-duration: 0.8s;
+}
+.hr--high {
+  animation-duration: 0.5s;
+}
+
+@keyframes pulsate {
+  from {
+    scale: 1;
+  }
+  to {
+    scale: 1.3;
+  }
 }
 
 @media screen and (min-width: 425) {

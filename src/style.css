@@ -23,8 +23,6 @@
   --c-accent-dark: #4f62a1;
   --c-extra-message-dark: hsl(226, 77%, 78%);
 
-  --c-accent-bright: #18abd3;
-
   --c-bg: var(--c-bg-light);
   --c-card-bg: var(--c-card-bg-light);
   --c-bg-gray: var(--c-bg-gray-light);
@@ -32,6 +30,13 @@
   --c-text-gray: var(--c-text-gray-light);
   --c-accent: var(--c-accent-light);
   --c-extra-message: var(--c-extra-message-light);
+
+  /* Various other colours */
+  --c-accent-bright: #18abd3;
+  --c-hr-low: #c1d0e7;
+  --c-hr-normal: var(--c-text);
+  --c-hr-elevated: #e2a414;
+  --c-hr-high: #ef2e1d;
 }
 
 @media (prefers-color-scheme: dark) {

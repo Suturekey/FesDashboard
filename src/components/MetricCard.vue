@@ -7,7 +7,10 @@ defineProps<{
   liveMetric: number;
   unit: string;
   hasGraph?: boolean;
-  progressMax?: number;
+  progress: {
+    max: number;
+    colour?: string;
+  };
   substats?: {
     icon?: string;
     description: string;
@@ -25,7 +28,13 @@ defineProps<{
     </div>
     <div class="graphContainer" v-if="hasGraph"></div>
     <div class="barContainer">
-      <progress :value="liveMetric" :max="progressMax"></progress>
+      <progress
+        :value="liveMetric"
+        :max="progress?.max"
+        :style="`--progress-colour: ${
+          progress.colour ? progress.colour : 'var(--c-accent-bright)'
+        }`"
+      ></progress>
     </div>
     <div class="stats">
       <div class="mainStat">
@@ -71,8 +80,10 @@ defineProps<{
 
   .barContainer {
     margin-bottom: 0.5rem;
+
     progress {
       --border-radius: 20px;
+      --progress-colour: var(--c-accent-bright);
       width: 100%;
       height: 8px;
 
@@ -82,11 +93,11 @@ defineProps<{
 
       &::-webkit-progress-value {
         border-radius: var(--border-radius);
-        background-color: var(--c-accent-bright);
+        background-color: var(--progress-colour);
       }
 
       &::-moz-progress-bar {
-        background-color: var(--c-accent-bright);
+        background-color: var(--progress-colour);
       }
     }
   }
