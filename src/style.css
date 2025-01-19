@@ -10,6 +10,7 @@
   --c-bg-light: #e5e5e5;
   --c-bg-gray-light: #cecfd5;
   --c-text-light: #000000;
+  --c-text-gray-light: #414141;
   --c-accent-light: #5d71b0;
 
   /* Dark colour scheme */
@@ -17,16 +18,28 @@
   --c-bg-dark: #1b1b1b;
   --c-bg-gray-dark: #3c3c3c;
   --c-text-dark: #e5e5e5;
+  --c-text-gray-dark: #bfbfbf;
+  --c-accent-dark: #4f62a1;
 
-  --c-text-gray: #414141;
   --c-accent-bright: #18abd3;
 
   --c-bg: var(--c-bg-light);
   --c-card-bg: var(--c-card-bg-light);
   --c-bg-gray: var(--c-bg-gray-light);
   --c-text: var(--c-text-light);
-  --c-text-gray: var(--c-text-gray);
+  --c-text-gray: var(--c-text-gray-light);
   --c-accent: var(--c-accent-light);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --c-bg: var(--c-bg-dark);
+    --c-card-bg: var(--c-card-bg-dark);
+    --c-bg-gray: var(--c-bg-gray-dark);
+    --c-text: var(--c-text-dark);
+    --c-text-gray: var(--c-text-gray-dark);
+    --c-accent: var(--c-accent-dark);
+  }
 }
 
 html,
@@ -39,6 +52,11 @@ body,
 
 html {
   box-sizing: border-box;
+  color: var(--c-text);
+}
+
+body {
+  background-color: var(--c-bg);
 }
 
 *,

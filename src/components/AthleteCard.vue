@@ -106,7 +106,7 @@ onMounted(() => {
   position: relative;
   padding: var(--padding);
   background-color: var(--c-card-bg);
-  color: var(--c-text-light);
+  color: var(--c-text);
   border-radius: var(--border-radius);
   display: flex;
   flex-direction: column;

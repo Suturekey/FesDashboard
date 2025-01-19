@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import Icon from "./components/Icon.vue";
 import { onUnmounted } from "vue";
 import { useAthleteStore } from "./stores/athleteStore";
 import type { I_AthleteData } from "./../types";
@@ -25,7 +26,6 @@ onUnmounted(() => socket.close());
 
 <style scoped>
 .background {
-  background-color: var(--c-bg);
   overflow-y: auto;
   min-height: 100%;
 }

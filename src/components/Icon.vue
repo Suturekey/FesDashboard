@@ -59,4 +59,13 @@ defineProps<{
 .icon--heart {
   mask-image: ("@/assets/icons/heart.svg");
 }
+.icon--sun-moon {
+  mask-image: ("@/assets/icons/theme-light-dark.svg");
+}
+.icon--sun {
+  mask-image: ("@/assets/icons/wb-sunny.svg");
+}
+.icon--moon {
+  mask-image: ("@/assets/icons/moon-fill.svg");
+}
 </style>

@@ -5,7 +5,7 @@ import type { I_FakeAthleteData } from "../../types";
 import { useAthleteStore } from "../stores/athleteStore";
 import { round } from "../utils";
 import fakeData from "../data/fakeAthleteData";
-import { ref, computed, type Ref } from "vue";
+import { ref, computed } from "vue";
 
 const props = defineProps<{
   id: string;

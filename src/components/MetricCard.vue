@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import Icon from "./Icon.vue";
 
-const props = defineProps<{
+defineProps<{
   header: string;
   icon: string;
   liveMetric: number;
@@ -57,7 +57,7 @@ const props = defineProps<{
   display: flex;
   flex-direction: column;
   border-radius: 9px;
-  background-color: var(--c-card-bg-light);
+  background-color: var(--c-card-bg);
 
   .title {
     display: flex;
