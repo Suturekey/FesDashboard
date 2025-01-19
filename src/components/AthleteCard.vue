@@ -44,11 +44,11 @@ onMounted(() => {
     </div>
     <div class="steps">
       <progress
-        class="steps_progress"
+        class="steps__progress"
         :value="athlete?.metrics.steps"
         :max="fakeAthleteData?.stepGoal"
       ></progress>
-      <div class="steps_explicit">
+      <div class="steps__explicit">
         <span>Schritte</span>
         <span class="currentSteps">{{ athlete?.metrics.steps }}</span>
         <span> / {{ fakeAthleteData?.stepGoal }} </span>
@@ -57,15 +57,15 @@ onMounted(() => {
     <div class="bottom">
       <div class="statDisplay heartRate">
         <span class="title">Herzfrequenz</span>
-        <div class="badge" v-if="athlete && athlete.metrics.heartRate > 142">
+        <!-- <div class="badge" v-if="athlete && athlete.metrics.heartRate > 142">
           Erhöht
-        </div>
+        </div> -->
         <div class="measurement">
-          <Icon icon="heartRate" size="xl"></Icon>
-          <span class="measurement_value">{{
+          <Icon icon="heartRate" size="l"></Icon>
+          <span class="measurement__value">{{
             athlete?.metrics.heartRate
           }}</span>
-          <span class="measurement_unit">BPM</span>
+          <span class="measurement__unit">BPM</span>
         </div>
         <div class="stats">
           <span
@@ -82,15 +82,19 @@ onMounted(() => {
       <div class="statDisplay speed">
         <span class="title">Geschwindigkeit</span>
         <div class="measurement">
-          <Icon icon="speed" size="xl"></Icon>
-          <span class="measurement_value">{{ athlete?.metrics.speed }}</span>
-          <span class="measurement_unit">MPH</span>
+          <Icon icon="speed" size="l"></Icon>
+          <span class="measurement__value">{{ athlete?.metrics.speed }}</span>
+          <span class="measurement__unit">MPH</span>
         </div>
         <div class="stats">
-          <span>Avg</span>
-          <span class="fwt-bold">{{ stats?.speed.avg }}</span>
-          <span>Max</span>
-          <span class="fwt-bold">{{ stats?.speed.max }}</span>
+          <span>
+            Avg
+            <span class="fwt-bold">{{ stats?.speed.avg }}</span>
+          </span>
+          <span>
+            Max
+            <span class="fwt-bold">{{ stats?.speed.max }}</span>
+          </span>
         </div>
       </div>
     </div>
@@ -105,7 +109,7 @@ onMounted(() => {
 .card {
   --image-dim: 100px;
   --image-margin: 0.5rem;
-  --padding: 0.9rem;
+  --padding: 0.6rem;
   --border-radius: 8px;
   position: relative;
   padding: var(--padding);
@@ -115,6 +119,7 @@ onMounted(() => {
   display: flex;
   flex-direction: column;
   line-height: 1;
+  width: clamp(310px, 100%, 500px);
 
   box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
 
@@ -144,7 +149,7 @@ onMounted(() => {
 
 .header {
   margin-left: calc(var(--image-dim) + var(--image-margin));
-  margin-bottom: 0.25rem;
+  margin-bottom: 0.7rem;
   display: flex;
 
   .names {
@@ -191,75 +196,92 @@ onMounted(() => {
       background-color: var(--c-accent-bright);
     }
   }
+}
+.steps__explicit {
+  display: flex;
 
-  .steps_explicit {
-    display: flex;
+  span:first-of-type {
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    color: var(--c-text-gray);
+  }
 
-    span:first-of-type {
-      font-size: 0.8rem;
-    }
+  .currentSteps {
+    margin-left: auto;
+    margin-right: 0.3rem;
+    font-size: 1.4rem;
 
-    .currentSteps {
-      margin-left: auto;
-      margin-right: 0.3rem;
-      font-size: 1.4rem;
-
-      & + span {
-        margin-bottom: 3px;
-        font-size: 0.9rem;
-        align-self: end;
-      }
+    & + span {
+      margin-bottom: 3px;
+      font-size: 0.9rem;
+      align-self: end;
     }
   }
 }
 
 .bottom {
-  height: 120px;
-  background-color: var(--c-bg-gray);
+  position: relative;
   border-radius: 9px;
   display: flex;
+  justify-content: space-around;
+  padding-inline: 0.5rem;
+  padding-bottom: 1rem;
+}
+.statDisplay {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+}
+.title {
+  font-size: 0.9rem;
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+}
 
-  & > div {
-    flex: 1;
-  }
+.measurement {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 1.2rem;
+}
+.measurement__value {
+  font-size: 2.5rem;
+  margin-right: 0.1rem;
+  margin-left: 0.3rem;
+}
+.measurement__unit {
+  align-self: start;
+  margin-top: 0.2rem;
+  text-align: center;
+  flex-basis: 100%;
+}
 
-  .statDisplay {
+.stats {
+  display: flex;
+  gap: 0.4rem;
+
+  font-size: 0.8rem;
+
+  span {
     display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: space-between;
-    padding-block: 0.5rem;
-
-    .title {
-      font-size: 0.8rem;
-    }
-
-    .measurement {
-      display: flex;
-      align-items: center;
-
-      .measurement_value {
-        font-size: 2.5rem;
-        margin-right: 0.1rem;
-        margin-left: 0.2rem;
-      }
-      .measurement_unit {
-        align-self: start;
-        margin-top: 0.2rem;
-      }
-    }
-
-    .stats {
-      display: flex;
-      gap: 0.4rem;
-
-      font-size: 0.8rem;
-    }
+    gap: 0.2rem;
   }
 }
 
-.statDisplay.heartRate {
-  position: relative;
+.statDisplay.heartRate::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  background-color: var(--c-bg-gray);
+  width: 100%;
+  height: 82%;
+  bottom: 0;
+  left: 0;
+  border-radius: 9px;
+
+  /* position: relative;
 
   .badge {
     position: absolute;
@@ -268,6 +290,18 @@ onMounted(() => {
     border-radius: 4px;
     top: 1.2rem;
     font-size: 0.8rem;
+  } */
+}
+
+@media screen and (min-width: 425px) {
+  .card {
+    --padding: 0.9rem;
   }
+  .measurement__unit {
+    flex-basis: unset;
+  }
+}
+
+@media screen and (min-width: 768px) {
 }
 </style>

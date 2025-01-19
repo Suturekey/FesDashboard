@@ -19,6 +19,7 @@ function connectToWebSocket() {
   socket.onopen = () => {
     connectionLive.value = true;
     displayFailedConnInfo.value = false;
+    attemptingReconnect.value = false;
   };
 
   socket.onmessage = (messageEvent) => {
@@ -105,6 +106,9 @@ onUnmounted(() => socket.close());
   flex-direction: column;
   gap: 0.5rem;
 
+  max-width: 500px;
+  margin: 1rem;
+
   .message {
     display: flex;
     gap: 1rem;
@@ -132,15 +136,15 @@ onUnmounted(() => socket.close());
     font-weight: 600;
     gap: 0.5rem;
 
-    &[disable="true"] {
+    &:disabled {
       background-color: var(--c-bg-gray-light);
-    }
 
-    .reconnecting {
+      .icon {
       animation-name: rotation;
-      animation-duration: 2s;
+        animation-duration: 1.7s;
       animation-iteration-count: infinite;
       animation-timing-function: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+      }
     }
   }
 }

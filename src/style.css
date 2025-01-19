@@ -63,10 +63,6 @@ body {
   background-color: var(--c-bg);
 }
 
-#app {
-  padding: 1rem;
-}
-
 *,
 *:before,
 *:after {

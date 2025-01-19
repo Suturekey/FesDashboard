@@ -161,8 +161,16 @@ watch(
 }
 
 .athleteList {
-  display: grid;
-  gap: 1em;
-  max-width: 600px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  width: 100%;
+}
+
+@media screen and (min-width: 425px) {
+  .athleteList {
+    gap: 1.5rem;
+  }
 }
 </style>
