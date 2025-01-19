@@ -51,7 +51,7 @@ defineProps<{
 
 <style scoped>
 .card {
-  width: 100%;
+  width: clamp(310px, 100%, 500px);
   padding: 1rem;
   box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
   display: flex;
@@ -93,6 +93,7 @@ defineProps<{
 
   .stats {
     display: flex;
+    justify-content: space-around;
   }
 
   .mainStat {
@@ -113,11 +114,14 @@ defineProps<{
   }
 
   .subStats {
-    flex: 1;
     display: grid;
     grid-template-columns: auto auto;
+    grid-auto-rows: min-content;
+    column-gap: 0.5rem;
+    row-gap: 0.1rem;
 
     .substat__description {
+      white-space: nowrap;
       font-size: 0.7rem;
       text-transform: uppercase;
       color: var(--c-text-gray);
@@ -131,6 +135,7 @@ defineProps<{
       font-size: 0.8rem;
       font-weight: 600;
       justify-self: end;
+      white-space: nowrap;
 
       span:nth-child(2) {
         margin-left: 0.25rem;

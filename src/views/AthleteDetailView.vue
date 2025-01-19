@@ -59,133 +59,140 @@ function inRange(
       <span class="bigName">{{ fakeAthleteData.lastName }}</span>
       <span class="smallName">{{ fakeAthleteData.firstName }}</span>
     </div>
-    <MetricCard
-      class="card"
-      header="Scritte"
-      icon="steps"
-      unit="Schritte"
-      :liveMetric="athlete?.steps ?? 0"
-      :progressMax="fakeAthleteData.stepGoal"
-      :substats="[
-        {
-          icon: 'crown',
-          description: 'Rekord',
-          value: fakeAthleteData.stepRecord,
-        },
-        {
-          icon: 'distance',
-          description: 'Distanz',
-          value: distance,
-        },
-        {
-          icon: 'elevation',
-          description: 'Höhe',
-          value: elevation,
-        },
-        {
-          icon: 'metronome',
-          description: 'Frequenz',
-          value: '1.3 Hz',
-        },
-      ]"
-    >
-      <template v-slot:metricExtra>
-        <span class="stepsInfo">
-          {{ fakeAthleteData.stepGoal - (athlete?.steps ?? 0) }} übrig
-        </span>
-      </template>
-    </MetricCard>
-    <MetricCard
-      class="card"
-      header="Herzfrequenz"
-      icon="heartRate"
-      unit="bpm"
-      :liveMetric="athlete?.heartRate ?? 0"
-      :progressMax="250"
-      :substats="[
-        {
-          description: 'Minimum',
-          value: stats?.heartRate.min ?? 0,
-          withUnit: true,
-        },
-        {
-          description: 'Durchschnitt',
-          value: stats?.heartRate.avg ?? 0,
-          withUnit: true,
-        },
-        {
-          description: 'Maximum',
-          value: stats?.heartRate.max ?? 0,
-          withUnit: true,
-        },
-      ]"
-    >
-      <template v-slot:metricExtra>
-        <div>
-          <Icon icon="heart" size="m"></Icon>
-          <span v-if="inRange(athlete?.heartRate, 0, 59)">Niedrig</span>
-          <span v-else-if="inRange(athlete?.heartRate, 60, 100)">Normal</span>
-          <span v-else-if="inRange(athlete?.heartRate, 101, 180)">Erhöht</span>
-          <span v-else>Sehr Hoch</span>
-        </div>
-      </template>
-    </MetricCard>
-    <MetricCard
-      class="card"
-      header="Geschwindigkeit"
-      icon="speed"
-      unit="MPH"
-      :liveMetric="athlete?.speed ?? 0"
-      :progressMax="30"
-      :substats="[
-        {
-          icon: 'crown',
-          description: 'Rekord',
-          withUnit: true,
-          value: fakeAthleteData.speedRecord,
-        },
-        {
-          description: 'Durchschnitt',
-          value: stats?.heartRate.avg ?? 0,
-          withUnit: true,
-        },
-        {
-          description: 'Maximum',
-          value: stats?.heartRate.max ?? 0,
-          withUnit: true,
-        },
-      ]"
-    ></MetricCard>
+    <div class="metricCards">
+      <MetricCard
+        class="card"
+        header="Schritte"
+        icon="steps"
+        unit="Schritte"
+        :liveMetric="athlete?.steps ?? 0"
+        :progressMax="fakeAthleteData.stepGoal"
+        :substats="[
+          {
+            icon: 'crown',
+            description: 'Rekord',
+            value: fakeAthleteData.stepRecord,
+          },
+          {
+            icon: 'distance',
+            description: 'Distanz',
+            value: distance,
+          },
+          {
+            icon: 'elevation',
+            description: 'Höhe',
+            value: elevation,
+          },
+          {
+            icon: 'metronome',
+            description: 'Frequenz',
+            value: '1.3 Hz',
+          },
+        ]"
+      >
+        <template v-slot:metricExtra>
+          <span class="stepsInfo">
+            {{ fakeAthleteData.stepGoal - (athlete?.steps ?? 0) }} übrig
+          </span>
+        </template>
+      </MetricCard>
+      <MetricCard
+        class="card"
+        header="Herzfrequenz"
+        icon="heartRate"
+        unit="bpm"
+        :liveMetric="athlete?.heartRate ?? 0"
+        :progressMax="250"
+        :substats="[
+          {
+            description: 'Minimum',
+            value: stats?.heartRate.min ?? 0,
+            withUnit: true,
+          },
+          {
+            description: 'Durchschnitt',
+            value: stats?.heartRate.avg ?? 0,
+            withUnit: true,
+          },
+          {
+            description: 'Maximum',
+            value: stats?.heartRate.max ?? 0,
+            withUnit: true,
+          },
+        ]"
+      >
+        <template v-slot:metricExtra>
+          <div>
+            <Icon icon="heart" size="m"></Icon>
+            <span v-if="inRange(athlete?.heartRate, 0, 59)">Niedrig</span>
+            <span v-else-if="inRange(athlete?.heartRate, 60, 100)">Normal</span>
+            <span v-else-if="inRange(athlete?.heartRate, 101, 180)"
+              >Erhöht</span
+            >
+            <span v-else>Sehr Hoch</span>
+          </div>
+        </template>
+      </MetricCard>
+      <MetricCard
+        class="card"
+        header="Geschwindigkeit"
+        icon="speed"
+        unit="MPH"
+        :liveMetric="athlete?.speed ?? 0"
+        :progressMax="30"
+        :substats="[
+          {
+            icon: 'crown',
+            description: 'Rekord',
+            withUnit: true,
+            value: fakeAthleteData.speedRecord,
+          },
+          {
+            description: 'Durchschnitt',
+            value: stats?.heartRate.avg ?? 0,
+            withUnit: true,
+          },
+          {
+            description: 'Maximum',
+            value: stats?.heartRate.max ?? 0,
+            withUnit: true,
+          },
+        ]"
+      ></MetricCard>
+    </div>
   </div>
 </template>
 
 <style scoped>
 .container {
   --image-dim: 130px;
-  display: grid;
-  width: 100%;
   position: relative;
-  height: auto;
-  padding: 1rem;
-  justify-items: center;
-
-  .profile {
-    width: var(--image-dim);
-    aspect-ratio: 1;
-    border-radius: 50%;
-    z-index: 1;
-  }
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  padding-top: 1rem;
 
   &::before {
     content: "";
-    height: calc((var(--image-dim) + 1rem) * 0.75);
-    width: 100%;
     position: absolute;
+    top: 0;
+    height: calc(var(--image-dim) * 0.75);
+    width: 100%;
     background-color: var(--c-accent);
   }
 }
 
+.profile {
+  width: var(--image-dim);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  z-index: 1;
+}
+
 .names {
+  margin-bottom: 1rem;
+
   .bigName {
     font-size: 2rem;
     margin-right: 0.5rem;
@@ -197,13 +204,33 @@ function inRange(
   }
 }
 
-.card:not(:last-of-type) {
-  margin-bottom: 1.5rem;
+.metricCards {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1fr;
+  justify-items: center;
+  row-gap: 1.5rem;
+  padding: 0.5rem;
 }
 
 .stepsInfo {
   color: var(--c-extra-message);
   font-size: 0.9rem;
   font-weight: 600;
+}
+
+@media screen and (min-width: 425) {
+  .metricCards {
+    padding: 1rem;
+  }
+}
+
+@media screen and (min-width: 768px) {
+  .metricCards {
+    width: 100%;
+    max-width: 800px;
+    grid-template-columns: 1fr 1fr;
+    column-gap: 1rem;
+  }
 }
 </style>
