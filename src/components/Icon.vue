@@ -65,6 +65,12 @@ defineProps<{
 .icon--medal {
   mask-image: url("@/assets/icons/medal.svg");
 }
+.icon--reload {
+  mask-image: url("@/assets/icons/alternate-sync.svg");
+}
+.icon--warning {
+  mask-image: url("@/assets/icons/warning.svg");
+}
 .icon--sun-moon {
   mask-image: url("@/assets/icons/theme-light-dark.svg");
 }

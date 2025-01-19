@@ -1,25 +1,91 @@
 <script setup lang="ts">
-import { onUnmounted } from "vue";
+import Icon from "./components/Icon.vue";
+import { onBeforeMount, onMounted, onUnmounted, ref } from "vue";
 import { useAthleteStore } from "./stores/athleteStore";
 import type { I_AthleteData } from "./../types";
 
+const socketAdress = "ws://ubuntu01.fes-sport.de:10001";
+
 const athleteStore = useAthleteStore();
 
-const socket = new WebSocket("ws://ubuntu01.fes-sport.de:10001");
+let socket: WebSocket;
+const connectionLive = ref(false);
+const attemptingReconnect = ref(false);
+const displayFailedConnInfo = ref(false);
 
-socket.addEventListener("message", (messageEvent) => {
-  const athleteList: I_AthleteData[] = JSON.parse(messageEvent.data);
-  athleteStore.replaceList(athleteList);
+function connectToWebSocket() {
+  socket = new WebSocket(socketAdress);
+
+  socket.onopen = () => {
+    connectionLive.value = true;
+    displayFailedConnInfo.value = false;
+  };
+
+  socket.onmessage = (messageEvent) => {
+    const athleteList: I_AthleteData[] = JSON.parse(messageEvent.data);
+    athleteStore.replaceList(athleteList);
+  };
+
+  socket.onclose = (closeEvent) => {
+    connectionLive.value = false;
+    console.info("The WebSocket server closed the connection", closeEvent);
+  };
+
+  socket.onerror = (errorEvent) => {
+    connectionLive.value = false;
+    console.error("A WebSocket connection error occured", errorEvent);
+  };
+}
+
+function reconnect() {
+  setTimeout(() => {
+    attemptingReconnect.value = false;
+    if (!connectionLive.value) {
+      displayFailedConnInfo.value = true;
+    }
+  }, 5000);
+  attemptingReconnect.value = true;
+  connectToWebSocket();
+}
+
+onBeforeMount(() => {
+  connectToWebSocket();
 });
 
-setTimeout(() => {
-  socket.close();
+setInterval(() => {
+  if (socket) {
+    socket.close();
+  }
 }, 10000);
 
 onUnmounted(() => socket.close());
 </script>
 
 <template>
+  <div v-if="!connectionLive" class="warning">
+    <span class="message">
+      <Icon icon="warning" colour="#ff0000" size="l"></Icon>
+      <span>
+        <span class="bold">Achtung: </span>
+        Die Verbindung zum Server wurde unterbrochen.
+      </span>
+    </span>
+    <span
+      v-if="displayFailedConnInfo && !attemptingReconnect"
+      class="failedConn"
+      >Info: Neuverbindung fehlgeschlagen</span
+    >
+    <button @click="reconnect" :disable="attemptingReconnect">
+      <Icon
+        icon="reload"
+        :colour="`var(--c-text-light)`"
+        :class="{
+          reconnecting: attemptingReconnect,
+        }"
+      ></Icon>
+      {{ attemptingReconnect ? "Baue Verbindung auf..." : "Neu verbinden" }}
+    </button>
+  </div>
   <router-view class="background"></router-view>
 </template>
 
@@ -27,6 +93,64 @@ onUnmounted(() => socket.close());
 .background {
   overflow-y: auto;
   min-height: 100%;
+}
+
+.warning {
+  color: var(--c-text-light);
+  background-color: #fdedee;
   padding: 1rem;
+  margin-bottom: 1rem;
+  border-radius: 9px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+
+  .message {
+    display: flex;
+    gap: 1rem;
+
+    .bold {
+      font-weight: 600;
+      color: #470000;
+    }
+  }
+
+  .failedConn {
+    font-size: 0.8rem;
+    font-weight: 600;
+    align-self: center;
+    color: #470000;
+  }
+
+  button {
+    margin-inline: auto;
+    display: flex;
+    align-items: center;
+    background-color: #bcd1de;
+    padding: 0.25rem 1rem;
+    border-radius: 90px;
+    font-weight: 600;
+    gap: 0.5rem;
+
+    &[disable="true"] {
+      background-color: var(--c-bg-gray-light);
+    }
+
+    .reconnecting {
+      animation-name: rotation;
+      animation-duration: 2s;
+      animation-iteration-count: infinite;
+      animation-timing-function: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    }
+  }
+}
+
+@keyframes rotation {
+  from {
+    rotate: 0deg;
+  }
+  to {
+    rotate: 360deg;
+  }
 }
 </style>
