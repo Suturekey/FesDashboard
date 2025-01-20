@@ -7,7 +7,6 @@ const props = defineProps<{
   icon: string;
   liveMetric: number;
   unit: string;
-  hasGraph?: boolean;
   progress: {
     max: number;
     colour?: string;
@@ -29,7 +28,6 @@ const progressbarId = computed(() => `progressbar${props.header}`);
       <Icon :icon="icon" size="l"></Icon>
       <strong>{{ header }}</strong>
     </div>
-    <div class="graphContainer" v-if="hasGraph"></div>
     <div class="barContainer">
       <progress
         :id="progressbarId"

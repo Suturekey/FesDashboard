@@ -71,13 +71,4 @@ defineProps<{
 .icon--warning {
   mask-image: url("@/assets/icons/warning.svg");
 }
-.icon--sun-moon {
-  mask-image: url("@/assets/icons/theme-light-dark.svg");
-}
-.icon--sun {
-  mask-image: url("@/assets/icons/wb-sunny.svg");
-}
-.icon--moon {
-  mask-image: url("@/assets/icons/moon-fill.svg");
-}
 </style>

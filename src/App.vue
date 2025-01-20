@@ -50,9 +50,7 @@ function reconnect() {
   connectToWebSocket();
 }
 
-onBeforeMount(() => {
-  connectToWebSocket();
-});
+onBeforeMount(() => connectToWebSocket());
 
 onUnmounted(() => socket.close());
 </script>
@@ -136,15 +134,6 @@ onUnmounted(() => socket.close());
         animation-timing-function: cubic-bezier(0.68, -0.55, 0.265, 1.55);
       }
     }
-  }
-}
-
-@keyframes rotation {
-  from {
-    rotate: 0deg;
-  }
-  to {
-    rotate: 360deg;
   }
 }
 </style>

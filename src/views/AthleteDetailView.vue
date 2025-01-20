@@ -17,7 +17,7 @@ const fakeAthleteData = ref();
 fakeAthleteData.value =
   (fakeData as Record<string, I_FakeAthleteData>)[props.id] || unknownAthlete;
 
-const athlete = computed(
+const athleteMetrics = computed(
   () =>
     athleteStore.athleteList.find((athlete) => athlete.athleteId === props.id)
       ?.metrics
@@ -29,12 +29,14 @@ const imageUrl = computed(
   () => new URL(`/src/data/images/${props.id}.jpg`, import.meta.url).href
 );
 
+/* These two computed properties are completely made up and are derived from an
+ * arbitrary calculation based on the steps taken by the athlete
+ */
 const distance = computed(
-  () => `${round((athlete.value?.steps ?? 0) * 0.0003, 2)} km`
+  () => `${round((athleteMetrics.value?.steps ?? 0) * 0.0003, 2)} km`
 );
-
 const elevation = computed(
-  () => `${round((athlete.value?.steps ?? 0) * 0.002, 0)} m`
+  () => `${round((athleteMetrics.value?.steps ?? 0) * 0.002, 0)} m`
 );
 
 const heartRateIntensity = computed(() => {
@@ -44,7 +46,7 @@ const heartRateIntensity = computed(() => {
     ELEVATED = "elevated",
     HIGH = "high",
   }
-  const heartRate = athlete.value?.heartRate ?? 0;
+  const heartRate = athleteMetrics.value?.heartRate ?? 0;
   let text = "";
   let modifier = "";
 
@@ -88,7 +90,7 @@ const heartRateIntensity = computed(() => {
         header="Schritte"
         icon="steps"
         unit="Schritte"
-        :liveMetric="athlete?.steps ?? 0"
+        :liveMetric="athleteMetrics?.steps ?? 0"
         :progress="{
           max: fakeAthleteData.stepGoal,
         }"
@@ -117,7 +119,7 @@ const heartRateIntensity = computed(() => {
       >
         <template v-slot:metricExtra>
           <span class="stepsInfo">
-            {{ fakeAthleteData.stepGoal - (athlete?.steps ?? 0) }} übrig
+            {{ fakeAthleteData.stepGoal - (athleteMetrics?.steps ?? 0) }} übrig
           </span>
         </template>
       </MetricCard>
@@ -126,7 +128,7 @@ const heartRateIntensity = computed(() => {
         header="Herzfrequenz"
         icon="heartRate"
         unit="bpm"
-        :liveMetric="athlete?.heartRate ?? 0"
+        :liveMetric="athleteMetrics?.heartRate ?? 0"
         :progress="{
           max: 250,
           colour: heartRateIntensity.colour,
@@ -169,7 +171,7 @@ const heartRateIntensity = computed(() => {
         header="Geschwindigkeit"
         icon="speed"
         unit="MPH"
-        :liveMetric="athlete?.speed ?? 0"
+        :liveMetric="athleteMetrics?.speed ?? 0"
         :progress="{
           max: 30,
         }"

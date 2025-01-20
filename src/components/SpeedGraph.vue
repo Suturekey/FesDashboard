@@ -53,6 +53,7 @@ function createDataset(athleteId: string, data: (number | null)[]) {
 }
 
 onMounted(() => {
+  /* Setting the Chart properties */
   Chart.register(
     LineController,
     LineElement,
@@ -67,6 +68,8 @@ onMounted(() => {
   const labels = [];
   const datasets: ChartDataset[] = [];
 
+  /* We are using the recorded data from athleteDatasets to set the intial datasets and labels for the chart.
+  Without this data, we would have to start with an empty chart, when coming back from another page.*/
   athleteStore.athleteDatasets.forEach((dataset, athleteId) => {
     datasets.push(
       createDataset(athleteId, dataset.speed.slice(-maxDisplayedMeasurements))
@@ -97,11 +100,13 @@ onMounted(() => {
 watch(
   () => athleteStore.athleteList,
   (newList) => {
+    /* A change in the athleteList signals that new live data has arrived. We filter the new data for their athleteIds and speed values */
     const speedValues = newList.reduce((acc: Record<string, number>, cur) => {
       acc[cur.athleteId] = cur.metrics.speed;
       return acc;
     }, {});
 
+    /* Add a new label to the chart and remove old labels when needed */
     if (speedChart.data.labels!.length >= maxDisplayedMeasurements) {
       speedChart.data.labels?.shift();
     }
