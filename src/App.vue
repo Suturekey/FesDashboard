@@ -54,12 +54,6 @@ onBeforeMount(() => {
   connectToWebSocket();
 });
 
-setInterval(() => {
-  if (socket) {
-    socket.close();
-  }
-}, 10000);
-
 onUnmounted(() => socket.close());
 </script>
 

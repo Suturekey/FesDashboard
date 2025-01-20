@@ -1,5 +1,17 @@
-# Vue 3 + TypeScript + Vite
+# Description
 
-This template should help get you started developing with Vue 3 and TypeScript in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
+This is an SPA created for a frontend interview at FES (Institut für Forschung und Entwicklung von Sportgeräten). The App provides a dashboard to view and analyse live fitness metrics from athletes. The data is provided via WebSocket.
 
-Learn more about the recommended Project Setup and IDE Support in the [Vue Docs TypeScript Guide](https://vuejs.org/guide/typescript/overview.html#project-setup).
+## Features
+
+- A live display of athletes health metrics including basic analysis of the values over time
+- A view for each athlete showing their data in more detail
+- A line chart showing the athelete's speeds over the last 30 measurements and an indicator recognizing the fastest athlete of the day
+- A notification with a reconnect button if the connection to the WebSocket is lost
+
+# Installation
+
+1. Clone this repository into a directory of your choice
+2. Navigate into said folder and install the required packages using `npm i`
+3. Now run `npm run dev` to launch the application.
+4. Open the adress shown in the terminal in an internet browser
