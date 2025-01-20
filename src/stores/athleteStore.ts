@@ -112,6 +112,7 @@ export const useAthleteStore = defineStore("athlete", () => {
     recordValue: 0,
     timestamp: new Date(),
   }); // Athlete with the highest max speed measured (should be initialized using previous data if possible)
+  const numMeasurements = ref(0);
 
   /* Returns an object with athleteIds and their speed value from the last batch of data */
   const newSpeedValues = computed(() => {
@@ -154,6 +155,7 @@ export const useAthleteStore = defineStore("athlete", () => {
     });
 
     athleteList.value = newList;
+    numMeasurements.value++;
   }
 
   return {
@@ -162,6 +164,7 @@ export const useAthleteStore = defineStore("athlete", () => {
     athleteDatasets,
     speedRecord,
     newSpeedValues,
+    numMeasurements,
     replaceList,
   };
 });
