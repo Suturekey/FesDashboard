@@ -145,6 +145,8 @@ onMounted(() => {
 
   &:hover {
     cursor: pointer;
+    scale: 1.05;
+    transition: scale 0.2s;
   }
 
   & > div {
