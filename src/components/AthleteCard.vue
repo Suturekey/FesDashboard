@@ -22,6 +22,8 @@ const imageUrl = computed(
       .href
 );
 
+const progressbarId = computed(() => `progressbar${props.athlete.athleteId}`);
+
 onMounted(() => {
   fakeAthleteData.value =
     (fakeData as Record<string, I_FakeAthleteData>)[props.athlete.athleteId] ||
@@ -30,7 +32,11 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="card">
+  <a
+    class="card"
+    tabindex="0"
+    @click="$router.push(`/athlete/${athlete.athleteId}`)"
+  >
     <img
       :src="imageUrl"
       :alt="`Portrait of ${fakeAthleteData?.firstName} ${fakeAthleteData?.lastName}`"
@@ -40,16 +46,23 @@ onMounted(() => {
         <p class="names--small">{{ fakeAthleteData?.firstName }}</p>
         <p class="names--big">{{ fakeAthleteData?.lastName }}</p>
       </div>
-      <Icon v-if="holdsRecord" icon="medal" size="xl" class="recordIcon"></Icon>
+      <Icon
+        v-if="holdsRecord"
+        icon="medal"
+        size="xl"
+        class="recordIcon"
+        colour="var(--c-text-dark)"
+      ></Icon>
     </div>
     <div class="steps">
       <progress
+        :id="progressbarId"
         class="steps__progress"
         :value="athlete?.metrics.steps"
         :max="fakeAthleteData?.stepGoal"
       ></progress>
       <div class="steps__explicit">
-        <span>Schritte</span>
+        <label :for="progressbarId">Schritte</label>
         <span class="currentSteps">{{ athlete?.metrics.steps }}</span>
         <span> / {{ fakeAthleteData?.stepGoal }} </span>
       </div>
@@ -106,7 +119,7 @@ onMounted(() => {
         </div>
       </div>
     </div>
-  </div>
+  </a>
 </template>
 
 <style scoped>
@@ -170,12 +183,13 @@ onMounted(() => {
   .names {
     & > p {
       line-height: 1;
-      color: var(--c-text);
+      color: var(--c-text-dark);
     }
 
     .names--small {
       margin-left: -10px;
       font-size: 0.9rem;
+      font-weight: 600;
     }
 
     .names--big {
@@ -215,7 +229,7 @@ onMounted(() => {
 .steps__explicit {
   display: flex;
 
-  span:first-of-type {
+  label {
     font-size: 0.8rem;
     text-transform: uppercase;
     color: var(--c-text-gray);

@@ -1,7 +1,8 @@
 <script setup lang="ts">
+import { computed } from "vue";
 import Icon from "./Icon.vue";
 
-defineProps<{
+const props = defineProps<{
   header: string;
   icon: string;
   liveMetric: number;
@@ -18,10 +19,12 @@ defineProps<{
     withUnit?: boolean;
   }[];
 }>();
+
+const progressbarId = computed(() => `progressbar${props.header}`);
 </script>
 
 <template>
-  <div class="card">
+  <section class="card">
     <div class="title">
       <Icon :icon="icon" size="l"></Icon>
       <strong>{{ header }}</strong>
@@ -29,6 +32,7 @@ defineProps<{
     <div class="graphContainer" v-if="hasGraph"></div>
     <div class="barContainer">
       <progress
+        :id="progressbarId"
         :value="liveMetric"
         :max="progress?.max"
         :style="`--progress-colour: ${
@@ -37,11 +41,11 @@ defineProps<{
       ></progress>
     </div>
     <div class="stats">
-      <div class="mainStat">
+      <label class="mainStat" :for="progressbarId">
         <span class="value">{{ liveMetric }}</span>
         <span class="unit">{{ unit }}</span>
         <slot name="metricExtra"></slot>
-      </div>
+      </label>
       <div class="subStats">
         <template v-for="substat in substats">
           <span class="substat__description">
@@ -55,7 +59,7 @@ defineProps<{
         </template>
       </div>
     </div>
-  </div>
+  </section>
 </template>
 
 <style scoped>

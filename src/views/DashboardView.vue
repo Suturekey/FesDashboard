@@ -45,7 +45,6 @@ function getFullFakeName(athleteId: string) {
         :athlete="athlete"
         :stats="athleteStore.athleteAnalysis.get(athlete.athleteId)"
         :holds-record="athleteStore.speedRecord.athleteId === athlete.athleteId"
-        @click="$router.push(`/athlete/${athlete.athleteId}`)"
       ></AthleteCard>
     </div>
   </div>

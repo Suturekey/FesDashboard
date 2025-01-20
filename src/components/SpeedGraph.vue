@@ -88,9 +88,6 @@ onMounted(() => {
     type: "line",
     data: {
       labels: labels,
-      //   datasets: [...athleteStore.athleteDatasets.entries()].map(
-      //     ([athleteId, data]) => createDataset(athleteId, data.speed)
-      //   ),
       datasets: datasets,
     },
     options: chartOptions,
@@ -100,7 +97,6 @@ onMounted(() => {
 watch(
   () => athleteStore.athleteList,
   (newList) => {
-    // const speedValues = athleteStore.newSpeedValues;
     const speedValues = newList.reduce((acc: Record<string, number>, cur) => {
       acc[cur.athleteId] = cur.metrics.speed;
       return acc;
@@ -143,6 +139,13 @@ watch(
 
 <template>
   <div class="chartContainer">
-    <canvas ref="speed-canvas" style="max-width: 100%"></canvas>
+    <canvas
+      ref="speed-canvas"
+      style="max-width: 100%"
+      role="img"
+      :aria-label="`Ein Liniengraph, der live die gemessenen Geschwindigkeiten der Athleten auf dieser Seite anzeigt. Die letzten ${maxDisplayedMeasurements} Messungen werden hier dargestellt.`"
+    >
+      <p>Dieser Graph kann nicht angezeigt werden</p>
+    </canvas>
   </div>
 </template>
