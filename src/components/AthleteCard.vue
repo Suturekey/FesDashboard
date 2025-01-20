@@ -32,11 +32,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <a
-    class="card"
-    tabindex="0"
-    @click="$router.push(`/athlete/${athlete.athleteId}`)"
-  >
+  <router-link class="card" tabindex="0" :to="`/athlete/${athlete.athleteId}`">
     <img
       :src="imageUrl"
       :alt="`Portrait of ${fakeAthleteData?.firstName} ${fakeAthleteData?.lastName}`"
@@ -119,7 +115,7 @@ onMounted(() => {
         </div>
       </div>
     </div>
-  </a>
+  </router-link>
 </template>
 
 <style scoped>
